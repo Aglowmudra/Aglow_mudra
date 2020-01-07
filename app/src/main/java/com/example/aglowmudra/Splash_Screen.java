@@ -26,5 +26,6 @@ public class Splash_Screen extends AppCompatActivity {
             e.getStackTrace();
         }
         //test
+        //comment by rahul
     }
 }
