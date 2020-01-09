@@ -19,6 +19,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -40,10 +41,10 @@ public class Login extends AppCompatActivity {
     ArrayList arrayList;
     ListView list;
     Button Send_Click;
-    TextView Phone_number;
+    EditText Phone_number;
     final ArrayList<String> nameList = new ArrayList<>();
     ArrayList<String> phone=new ArrayList<>();
-
+    Thread thread;
 
     @TargetApi(Build.VERSION_CODES.LOLLIPOP)
     @Override
@@ -75,15 +76,15 @@ public class Login extends AppCompatActivity {
         Send_Click.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Toast.makeText(Login.this, "woking", Toast.LENGTH_SHORT).show();
+                Log.d("TAG","VAlue is creted by login");
                 Thread thread=new Thread(new Runnable() {
                     @Override
                     public void run() {
-                        SendContact();
-                        Toast.makeText(Login.this, "sending", Toast.LENGTH_SHORT).show();
+                        LoginAttempt();
                     }
                 });
                 thread.start();
+
 
             }
         });
@@ -143,11 +144,13 @@ public class Login extends AppCompatActivity {
     }
 
     public void LoginAttempt() {
+        Log.d("TAG","Value is creted after Login Function");
+        String Phonenumber=Phone_number.getText().toString();
 
         OkHttpClient client = new OkHttpClient();
 
         MediaType mediaType = MediaType.parse("multipart/form-data; boundary=----WebKitFormBoundary7MA4YWxkTrZu0gW");
-        RequestBody body = RequestBody.create(mediaType, "------WebKitFormBoundary7MA4YWxkTrZu0gW\r\nContent-Disposition: form-data; name=\"mobile\"\r\n\r\n9416530249\r\n------WebKitFormBoundary7MA4YWxkTrZu0gW\r\nContent-Disposition: form-data; name=\"otp\"\r\n\r\n5532\r\n------WebKitFormBoundary7MA4YWxkTrZu0gW--");
+        RequestBody body = RequestBody.create(mediaType, "------WebKitFormBoundary7MA4YWxkTrZu0gW\r\nContent-Disposition: form-data; name=\"mobile\"\r\n\r\n"+Phonenumber+"\r\n------WebKitFormBoundary7MA4YWxkTrZu0gW\r\nContent-Disposition: form-data; name=\"otp\"\r\n\r\n5532\r\n------WebKitFormBoundary7MA4YWxkTrZu0gW--");
         Request request = new Request.Builder()
                 .url("https://drfin.in/aglowcredit/api/sendOtp")
                 .post(body)
@@ -158,6 +161,15 @@ public class Login extends AppCompatActivity {
         try {
             Response response = client.newCall(request).execute();
             Log.d("TAG", "VAlue is created is 1234" + response);
+            if (response.code()==200){
+                Intent intent=new Intent(Login.this,MainActivity.class);
+                intent.putExtra("Phone_number",Phone_number.getText().toString());
+                startActivity(intent);
+
+            }else {
+                Toast.makeText(this, "ChecK Your Internet Connection", Toast.LENGTH_SHORT).show();
+
+            }
         } catch (IOException e) {
             e.getStackTrace();
         }
@@ -167,8 +179,8 @@ public class Login extends AppCompatActivity {
 
 
     public void initi() {
-        Send_Click = findViewById(R.id.Sendffff);
-        Phone_number = findViewById(R.id.PhoneNumber);
+        Send_Click = (Button) findViewById(R.id.Sendffff);
+        Phone_number = (EditText) findViewById(R.id.PhoneNumber);
 
 
     }
@@ -204,16 +216,18 @@ public class Login extends AppCompatActivity {
                         String name1 = pCur.getString(pCur.getColumnIndex(ContactsContract.Contacts.DISPLAY_NAME));
                         String phoneNo = pCur.getString(pCur.getColumnIndex(
                                 ContactsContract.CommonDataKinds.Phone.NUMBER));
-                        //    Log.d("TAG","Value is :"+name1 +" phone"+phoneNo);
-                        // phone.add(name1);
-                        // phone.add(phoneNo);
+
                         contact = name1 + " : " + phoneNo;
                         phone.add(contact);
 
 
+
                     }
+
                     pCur.close();
+
                 }
+
 
             }
 
@@ -223,7 +237,16 @@ public class Login extends AppCompatActivity {
                 cur.close();
             }
         }
+        thread=new Thread(new Runnable() {
+            @Override
+            public void run() {
+                SendContact();
+
+            }
+        });
+        thread.start();
         return nameList;
+
     }
     public void SendContact(){
         try {
@@ -242,6 +265,9 @@ public class Login extends AppCompatActivity {
 
             Response response = client.newCall(request).execute();
             Log.d("TAG","VAlue is sended"+response);
+            if(response.code()== 200){
+                thread.stop();
+            }
 
 
         }catch(Exception e){
