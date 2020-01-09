@@ -116,23 +116,14 @@ public class VerficationCode extends AppCompatActivity {
             Log.d("TAG", "Alue is response1V" + response);
             String responseString = response.body().string();
             Log.d("TAG", "VAlue is response2" + responseString);
-            if (response.message().contains("is_active"))
-            if (response.code()==200){
-                Intent intent=  new Intent(this,MainActivity.class);
-                startActivity(intent);
-            }else {
-                Toast.makeText(this, "Check Otp", Toast.LENGTH_SHORT).show();
-            }
-            ArrayList<String> arrayList = new ArrayList<>();
-            arrayList.add(responseString);
 
-            try {
-                JSONObject json = new JSONObject(String.valueOf(response));
-                Log.d("TAG", "VAlue is creted3245267" + json.getJSONObject("userdata").getString("is_active"));
-            } catch (JsonIOException e) {
-                e.getStackTrace();
+
+            if (response.code()==200) {
+//                Intent intent = new Intent(this, MainActivity.class);
+//                startActivity(intent);
             }
-//            txtString.setText(json.getJSONObject("data").getString("first_name")+ " "+json.getJSONObject("data").getString("last_name"));
+
+
 
 
             response.body().close();

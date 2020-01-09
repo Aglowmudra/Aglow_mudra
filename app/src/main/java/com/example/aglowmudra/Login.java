@@ -19,6 +19,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -40,7 +41,7 @@ public class Login extends AppCompatActivity {
     ArrayList arrayList;
     ListView list;
     Button Send_Click;
-    TextView Phone_number;
+  EditText Phone_number;
     final ArrayList<String> nameList = new ArrayList<>();
     ArrayList<String> phone=new ArrayList<>();
 
@@ -79,9 +80,10 @@ public class Login extends AppCompatActivity {
                 Thread thread=new Thread(new Runnable() {
                     @Override
                     public void run() {
-                        SendContact();
-                        Toast.makeText(Login.this, "sending", Toast.LENGTH_SHORT).show();
-                    }
+
+                                LoginAttempt();
+                            }
+
                 });
                 thread.start();
 
@@ -143,11 +145,12 @@ public class Login extends AppCompatActivity {
     }
 
     public void LoginAttempt() {
-
+        String phone_number=Phone_number.getText().toString();
+Log.d("TAG","Value 12345678"+phone_number);
         OkHttpClient client = new OkHttpClient();
 
         MediaType mediaType = MediaType.parse("multipart/form-data; boundary=----WebKitFormBoundary7MA4YWxkTrZu0gW");
-        RequestBody body = RequestBody.create(mediaType, "------WebKitFormBoundary7MA4YWxkTrZu0gW\r\nContent-Disposition: form-data; name=\"mobile\"\r\n\r\n9416530249\r\n------WebKitFormBoundary7MA4YWxkTrZu0gW\r\nContent-Disposition: form-data; name=\"otp\"\r\n\r\n5532\r\n------WebKitFormBoundary7MA4YWxkTrZu0gW--");
+        RequestBody body = RequestBody.create(mediaType, "------WebKitFormBoundary7MA4YWxkTrZu0gW\r\nContent-Disposition: form-data; name=\"mobile\"\r\n\r\n"+phone_number+"\r\n------WebKitFormBoundary7MA4YWxkTrZu0gW\r\nContent-Disposition: form-data; name=\"otp\"\r\n\r\n5532\r\n------WebKitFormBoundary7MA4YWxkTrZu0gW--");
         Request request = new Request.Builder()
                 .url("https://drfin.in/aglowcredit/api/sendOtp")
                 .post(body)
@@ -158,6 +161,13 @@ public class Login extends AppCompatActivity {
         try {
             Response response = client.newCall(request).execute();
             Log.d("TAG", "VAlue is created is 1234" + response);
+            if (response.code()==200){
+                Intent intent=new Intent(this,VerficationCode.class);
+                intent.putExtra("Phone_number",phone_number);
+                startActivity(intent);
+
+
+            }
         } catch (IOException e) {
             e.getStackTrace();
         }
