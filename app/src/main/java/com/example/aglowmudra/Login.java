@@ -19,6 +19,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -40,7 +41,8 @@ public class Login extends AppCompatActivity {
     ArrayList arrayList;
     ListView list;
     Button Send_Click;
-    TextView Phone_number;
+  //  TextView Phone_number;
+    EditText Phone_number;
     final ArrayList<String> nameList = new ArrayList<>();
     ArrayList<String> phone=new ArrayList<>();
 
