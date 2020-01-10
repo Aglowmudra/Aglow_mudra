@@ -1,41 +1,46 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".Login">
-
+    android:paddingTop="10dp"
+    android:paddingBottom="100dp"
+    android:background="@drawable/login_screen_background"
+    android:paddingLeft="24dp"
+    android:scaleType = "centerCrop"
+    android:paddingRight="24dp">
 
     <EditText
+
         android:id="@+id/PhoneNumber"
-        android:layout_width="wrap_content"
-        android:layout_height="44dp"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentEnd="true"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentBottom="true"
-        android:layout_marginStart="82dp"
-        android:layout_marginLeft="82dp"
-        android:layout_marginTop="168dp"
-        android:hint="Phone Number"
-
-        android:layout_marginEnd="84dp"
-        android:layout_marginRight="84dp"
-        android:layout_marginBottom="519dp"
-
-        android:text="Phone Number" />
+        android:layout_width="match_parent"
+        android:layout_height="80dp"
+        android:layout_centerVertical="true"
+        android:layout_marginLeft="15dp"
+        android:layout_marginTop="250dp"
+        android:layout_marginRight="15dp"
+        android:layout_marginBottom="20dp"
+        android:background="@drawable/edittextstyle"
+        android:ellipsize="start"
+        android:gravity="center"
+        android:hint="Enter Your Mobile Number"
+        android:inputType="number"
+        android:textSize="20dp" />
 
     <Button
+        android:layout_width="match_parent"
+        android:layout_height="80dp"
+        android:layout_centerVertical="true"
         android:id="@+id/Sendffff"
-        android:layout_width="281dp"
-        android:layout_height="58dp"
-        android:layout_alignParentEnd="true"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentBottom="true"
-        android:layout_marginEnd="48dp"
-        android:layout_marginRight="48dp"
-        android:layout_marginBottom="367dp"
-        android:text="Send" />
-</RelativeLayout>
+        android:layout_marginLeft="15dp"
+        android:layout_marginTop="30dp"
+        android:layout_marginRight="15dp"
+        android:layout_marginBottom="20dp"
+        android:background="@drawable/buttonstyle"
+        android:ellipsize="start"
+        android:gravity="center"
+        android:hint="Login"
+        android:textSize="30dp" />
+
+</LinearLayout>

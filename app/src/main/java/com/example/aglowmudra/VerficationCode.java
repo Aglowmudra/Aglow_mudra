@@ -18,6 +18,8 @@ import org.json.JSONObject;
 import java.io.IOException;
 import java.util.ArrayList;
 
+import okhttp3.Call;
+import okhttp3.Callback;
 import okhttp3.FormBody;
 import okhttp3.MediaType;
 import okhttp3.OkHttpClient;
@@ -29,6 +31,7 @@ public class VerficationCode extends AppCompatActivity {
     Button button;
     EditText Code_value;
     String Phone_number;
+    EditText Passsword, ConformPassword;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,13 +44,16 @@ public class VerficationCode extends AppCompatActivity {
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Thread thread = new Thread(new Runnable() {
-                    @Override
-                    public void run() {
-                        SendOtpApi();
-                    }
-                });
-                thread.start();
+                Log.d("TAG","Value is creted");
+                if (isValidate() && iS_VALIDATE()) {
+                    Thread thread = new Thread(new Runnable() {
+                        @Override
+                        public void run() {
+                            SendOtpApi();
+                        }
+                    });
+                    thread.start();
+                }
 
             }
         });
@@ -55,53 +61,23 @@ public class VerficationCode extends AppCompatActivity {
     }
 
     public void initi() {
-        button = (Button) findViewById(R.id.otpSend);
-        Code_value = (EditText) findViewById(R.id.OTPText);
+        button = (Button) findViewById(R.id.register);
+        Code_value = (EditText) findViewById(R.id.otp);
+        Passsword = findViewById(R.id.EnterPassword);
+        ConformPassword = findViewById(R.id.Confirmpassword);
 
     }
 
     public void SendOtpApi() {
         Log.d("TAG", "Value is creted in otp");
         String Phone_No = Code_value.getText().toString();
-     /*   OkHttpClient client = new OkHttpClient();
+        String Passwordotp = Passsword.getText().toString();
 
-        MediaType mediaType = MediaType.parse("application/x-www-form-urlencoded");
-        RequestBody body = RequestBody.create(mediaType, "mobile="+Phone_number+"&otp="+Phone_No);
-        Request request = new Request.Builder()
-                .url("https://drfin.in/aglowcredit/api/verifyOtp")
-                .post(body)
-                .addHeader("Content-Type", "application/x-www-form-urlencoded")
-                .addHeader("cache-control", "no-cache")
-                .addHeader("Postman-Token", "7aea7212-a815-4434-a703-f0d66866f57b")
-                .build();*/
-       /* OkHttpClient client = new OkHttpClient();
-
-        MediaType mediaType = MediaType.parse("application/json");
-        RequestBody body = RequestBody.create(mediaType, "mobile=8010616827&otp=1234");
-        Request request = new Request.Builder()
-                .url("https://drfin.in/aglowcredit/api/verifyOtp")
-                .post(body)
-                .addHeader("content-type", "application/x-www-form-urlencoded")
-                .addHeader("cache-control", "no-cache")
-                .build(); */
-   /*     OkHttpClient client = new OkHttpClient();
-
-        MediaType mediaType = MediaType.parse("multipart/form-data; boundary=----WebKitFormBoundary7MA4YWxkTrZu0gW");
-        RequestBody body = RequestBody.create(mediaType, "------WebKitFormBoundary7MA4YWxkTrZu0gW\r\nContent-Disposition: form-data; name=\"mobile\"\r\n\r\n8010616827\r\n------WebKitFormBoundary7MA4YWxkTrZu0gW\r\nContent-Disposition: form-data; name=\"otp\"\r\n\r\n1234\r\n------WebKitFormBoundary7MA4YWxkTrZu0gW--");
-        Request request = new Request.Builder()
-                .url("https://drfin.in/aglowcredit/api/verifyOtp")
-                .post(body)
-                .addHeader("content-type", "multipart/form-data; boundary=----WebKitFormBoundary7MA4YWxkTrZu0gW")
-                .addHeader("cache-control", "no-cache")
-                .addHeader("postman-token", "910f37a9-4930-ae8f-89c7-d37fe824c48d")
-                .build();
-
-
-*/
         String url = "https://drfin.in/aglowcredit/api/verifyOtp";
         RequestBody formBody = new FormBody.Builder()
                 .add("mobile", Phone_number)
                 .add("otp", Phone_No)
+                .add("password", Passwordotp)
                 .build();
 
         OkHttpClient client = new OkHttpClient();
@@ -115,15 +91,22 @@ public class VerficationCode extends AppCompatActivity {
             Response response = client.newCall(request).execute();
             Log.d("TAG", "Alue is response1V" + response);
             String responseString = response.body().string();
-            Log.d("TAG", "VAlue is response2" + responseString);
 
+            Log.d("TAG", "VAlue is response223" + responseString);
+            try {
+                JSONObject json = new JSONObject(responseString);
+                String Active = json.getJSONObject("userdata").getString("is_active");
+                Log.d("TAG", "value is frrrrrr" + Active);
+                if (Active.equals("0")) {
+                    Intent intent = new Intent(VerficationCode.this, AglowHomeActivity.class);
+                    startActivity(intent);
+                } else {
+                    Toast.makeText(this, "Check your OTP", Toast.LENGTH_SHORT).show();
+                }
+            } catch (Exception e) {
+                e.getStackTrace();
 
-            if (response.code()==200) {
-//                Intent intent = new Intent(this, MainActivity.class);
-//                startActivity(intent);
             }
-
-
 
 
             response.body().close();
@@ -134,5 +117,22 @@ public class VerficationCode extends AppCompatActivity {
 
     }
 
+    private boolean isValidate() {
+        String Password = Passsword.getText().toString();
+        String cpassword = ConformPassword.getText().toString();
+        if (!Password.contentEquals(cpassword)) {
+            ConformPassword.setError("Please Match the Password");
+            return false;
+        }
 
+        return true;
+    }
+
+    private boolean iS_VALIDATE() {
+        if (Code_value.getText().toString().isEmpty()) {
+            Code_value.setText("Please Enter Otp");
+            return false;
+        }
+        return true;
+    }
 }

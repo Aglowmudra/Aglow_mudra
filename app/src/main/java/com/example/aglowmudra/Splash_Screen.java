@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
+import android.util.Log;
 
 public class Splash_Screen extends AppCompatActivity {
 
@@ -12,20 +13,19 @@ public class Splash_Screen extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash__screen);
-        try{
+        try {
             new Handler().postDelayed(new Runnable() {
                 @Override
                 public void run() {
-                    Intent intent=new Intent(Splash_Screen.this,Login.class);
+                    Intent intent = new Intent(Splash_Screen.this, Login.class);
                     startActivity(intent);
                     finish();
                 }
-            },3000);
+            }, 3000);
 
-        }catch (Exception e){
+        } catch (Exception e) {
             e.getStackTrace();
         }
-        //test
-        //comment by rahul1
+
     }
 }

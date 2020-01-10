@@ -1,33 +1,76 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".VerficationCode">
-
+    android:paddingTop="10dp"
+    android:paddingBottom="100dp"
+    android:background="@drawable/login_screen_background"
+    android:paddingLeft="24dp"
+    android:scaleType = "centerCrop"
+    android:paddingRight="24dp">
 
     <EditText
-        android:id="@+id/OTPText"
-        android:layout_width="327dp"
-        android:layout_height="65dp"
-        android:layout_alignParentEnd="true"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentBottom="true"
-        android:layout_marginEnd="20dp"
-        android:layout_marginRight="20dp"
-        android:layout_marginBottom="597dp"
-        android:text="TextView" />
+
+        android:id="@+id/EnterPassword"
+        android:layout_width="match_parent"
+        android:layout_height="56dp"
+        android:layout_marginTop="250dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginRight="18dp"
+        android:layout_marginStart="20dp"
+        android:layout_marginLeft="52dp"
+        android:background="@drawable/edittextstyle"
+        android:ellipsize="start"
+        android:gravity="center"
+        android:hint="Enter Your password"
+        android:inputType="textPassword"
+        android:textSize="20dp" />
+
+    <EditText
+
+        android:id="@+id/Confirmpassword"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_centerVertical="true"
+        android:layout_marginStart="20dp"
+        android:layout_marginLeft="52dp"
+        android:layout_marginTop="40dp"
+        android:background="@drawable/edittextstyle"
+        android:ellipsize="start"
+        android:gravity="center"
+        android:hint="Confirm password"
+        android:inputType="textPassword"
+        android:textSize="20dp" />
+
+    <EditText
+
+        android:id="@+id/otp"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_centerVertical="true"
+        android:layout_marginLeft="36dp"
+        android:layout_marginTop="30dp"
+        android:layout_marginStart="20dp"
+        android:layout_marginBottom="30dp"
+        android:background="@drawable/edittextstyle"
+        android:gravity="center"
+        android:hint="Enter OTP"
+        android:inputType="number"
+        android:textSize="20dp" />
 
     <Button
-        android:id="@+id/otpSend"
-        android:layout_width="294dp"
-        android:layout_height="wrap_content"
-        android:layout_alignParentEnd="true"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentBottom="true"
-        android:layout_marginEnd="59dp"
-        android:layout_marginRight="59dp"
-        android:layout_marginBottom="407dp"
-        android:text="Button" />
-</RelativeLayout>
+        android:id="@+id/register"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_marginLeft="44dp"
+        android:layout_marginTop="1dp"
+        android:layout_marginStart="20dp"
+        android:background="@drawable/buttonstyle"
+        android:ellipsize="start"
+        android:gravity="center"
+        android:hint="Register"
+        android:textSize="30dp" />
+
+</LinearLayout>

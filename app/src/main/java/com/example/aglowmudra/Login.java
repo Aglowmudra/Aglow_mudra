@@ -6,8 +6,10 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 
 import android.Manifest;
+import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
 import android.content.ContentResolver;
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
@@ -15,6 +17,8 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.provider.ContactsContract;
+import android.provider.Settings;
+import android.telephony.TelephonyManager;
 import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
@@ -24,12 +28,15 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import org.json.JSONObject;
+
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.jar.Attributes;
 
+import okhttp3.FormBody;
 import okhttp3.MediaType;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
@@ -38,25 +45,29 @@ import okhttp3.Response;
 
 public class Login extends AppCompatActivity {
     public static final int REQUEST_READ_CONTACTS = 79;
+    private static final String TODO ="" ;
+    TelephonyManager telephonyManager;
     ArrayList arrayList;
     ListView list;
     Button Send_Click;
-  EditText Phone_number;
+    EditText Phone_number;
     final ArrayList<String> nameList = new ArrayList<>();
-    ArrayList<String> phone=new ArrayList<>();
+    ArrayList<String> phone = new ArrayList<>();
 
 
-    @TargetApi(Build.VERSION_CODES.LOLLIPOP)
+    @RequiresApi(api = Build.VERSION_CODES.M)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
-        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.READ_CONTACTS) == PackageManager.PERMISSION_GRANTED || ActivityCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) {
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.READ_CONTACTS) == PackageManager.PERMISSION_GRANTED ||
+                ActivityCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED)
+        {
             Log.d("TAG", "Value is created by system ");
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                arrayList =getAllContacts();
-                Log.d("TAG","Value is creted by 1234"+arrayList);
+                arrayList = getAllContacts();
+                Log.d("TAG", "Value is creted by 1234" + arrayList);
 
             }
         } else {
@@ -66,34 +77,43 @@ public class Login extends AppCompatActivity {
         try {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
 
+
             }
 
-        }catch (Exception e){
+        } catch (Exception e) {
             e.getStackTrace();
 
         }
         initi();
+        PhoneMiMe();
+
         Send_Click.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Toast.makeText(Login.this, "woking", Toast.LENGTH_SHORT).show();
-                Thread thread=new Thread(new Runnable() {
-                    @Override
-                    public void run() {
+                if (isValidate()) {
+                    Thread thread = new Thread(new Runnable() {
+                        @Override
+                        public void run() {
 
-                                LoginAttempt();
-                            }
+                            LoginAttempt1();
+                        }
 
-                });
-                thread.start();
-
+                    });
+                    thread.start();
+                }
             }
         });
 
     }
 
-
-
+    private boolean isValidate() {
+        if (Phone_number.getText().toString().isEmpty()) {
+            Phone_number.setError("Enter Your Phone Number");
+            return false;
+        }
+        return true;
+    }
 
 
     private void requestPermission() {
@@ -101,7 +121,7 @@ public class Login extends AppCompatActivity {
             // show UI part if you want here to show some rationale !!!
         } else {
             ActivityCompat.requestPermissions(this, new String[]{android.Manifest.permission.READ_CONTACTS, Manifest.permission.READ_EXTERNAL_STORAGE,
-                            Manifest.permission.READ_SMS, Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.CAMERA},
+                            Manifest.permission.READ_SMS, Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.CAMERA, Manifest.permission.READ_PHONE_STATE},
                     REQUEST_READ_CONTACTS);
         }
 
@@ -123,7 +143,7 @@ public class Login extends AppCompatActivity {
                         if (showRational == false) {
                             Log.d("TAG", "permission is  granted");
                             requestPermission();
-                            arrayList=getAllContacts();
+                            arrayList = getAllContacts();
 
 
                         }
@@ -144,37 +164,6 @@ public class Login extends AppCompatActivity {
 
     }
 
-    public void LoginAttempt() {
-        String phone_number=Phone_number.getText().toString();
-Log.d("TAG","Value 12345678"+phone_number);
-        OkHttpClient client = new OkHttpClient();
-
-        MediaType mediaType = MediaType.parse("multipart/form-data; boundary=----WebKitFormBoundary7MA4YWxkTrZu0gW");
-        RequestBody body = RequestBody.create(mediaType, "------WebKitFormBoundary7MA4YWxkTrZu0gW\r\nContent-Disposition: form-data; name=\"mobile\"\r\n\r\n"+phone_number+"\r\n------WebKitFormBoundary7MA4YWxkTrZu0gW\r\nContent-Disposition: form-data; name=\"otp\"\r\n\r\n5532\r\n------WebKitFormBoundary7MA4YWxkTrZu0gW--");
-        Request request = new Request.Builder()
-                .url("https://drfin.in/aglowcredit/api/sendOtp")
-                .post(body)
-                .addHeader("content-type", "multipart/form-data; boundary=----WebKitFormBoundary7MA4YWxkTrZu0gW")
-                .addHeader("cache-control", "no-cache")
-                .addHeader("postman-token", "b0819f8e-52f9-4b75-8849-7ac963935599")
-                .build();
-        try {
-            Response response = client.newCall(request).execute();
-            Log.d("TAG", "VAlue is created is 1234" + response);
-            if (response.code()==200){
-                Intent intent=new Intent(this,VerficationCode.class);
-                intent.putExtra("Phone_number",phone_number);
-                startActivity(intent);
-
-
-            }
-        } catch (IOException e) {
-            e.getStackTrace();
-        }
-    }
-
-
-
 
     public void initi() {
         Send_Click = findViewById(R.id.Sendffff);
@@ -182,11 +171,12 @@ Log.d("TAG","Value 12345678"+phone_number);
 
 
     }
-    private ArrayList getAllContacts() {
-        Log.d("TAG","Value is creted by system");
-   String contact="";
 
-        Log.d("TAG","Value is creted"+nameList);
+    private ArrayList getAllContacts() {
+        Log.d("TAG", "Value is creted by system");
+        String contact = "";
+
+        Log.d("TAG", "Value is creted" + nameList);
         ContentResolver cr = getContentResolver();
         Cursor cur = cr.query(ContactsContract.Contacts.CONTENT_URI,
                 null, null, null, null);
@@ -235,13 +225,14 @@ Log.d("TAG","Value 12345678"+phone_number);
         }
         return nameList;
     }
-    public void SendContact(){
+
+    public void SendContact() {
         try {
-            Log.d("TAG","VAlue is creted aftewr  send data"+phone);
+            Log.d("TAG", "VAlue is creted aftewr  send data" + phone);
             OkHttpClient client = new OkHttpClient();
 
             MediaType mediaType = MediaType.parse("application/x-www-form-urlencoded");
-            RequestBody body = RequestBody.create(mediaType, "auth_token=5e1081856674b&sms_list=%20&contact_list="+phone);
+            RequestBody body = RequestBody.create(mediaType, "auth_token=5e1081856674b&sms_list=%20&contact_list=" + phone);
             Request request = new Request.Builder()
                     .url("https://drfin.in/aglowcredit/api/updateCustomerDetails")
                     .post(body)
@@ -251,15 +242,73 @@ Log.d("TAG","Value 12345678"+phone_number);
                     .build();
 
             Response response = client.newCall(request).execute();
-            Log.d("TAG","VAlue is sended"+response);
+            Log.d("TAG", "VAlue is sended" + response);
 
 
-        }catch(Exception e){
+        } catch (Exception e) {
             e.getStackTrace();
 
         }
 
 
-
     }
+
+    public void LoginAttempt1() {
+        Log.d("TAG", "Value is  Login Attempt");
+        String Phone_no = Phone_number.getText().toString();
+
+        String url = "https://drfin.in/aglowcredit/api/sendOtp";
+        RequestBody formBody = new FormBody.Builder()
+                .add("mobile", Phone_no)
+                .build();
+
+        OkHttpClient client = new OkHttpClient();
+        Request request = new Request.Builder()
+                .url(url)
+                .post(formBody)
+                .build();
+
+
+        try {
+            Response response = client.newCall(request).execute();
+            Log.d("TAG", "Alue is response1V" + response);
+            String responseString = response.body().string();
+
+            Log.d("TAG", "VAlue is response22323" + responseString);
+            try {
+                JSONObject json = new JSONObject(responseString);
+
+
+                String Active = json.getJSONObject("userdata").getString("is_active");
+                Log.d("TAG", "value is frrrrrr54688" + Active);
+                if (Active.equals("1")) {
+                    Intent intent = new Intent(this, PasswordLogin.class);
+                    intent.putExtra("Phone_number", Phone_no);
+                    startActivity(intent);
+                    finish();
+                } else {
+                    Intent intent = new Intent(this, VerficationCode.class);
+                    intent.putExtra("Phone_number", Phone_no);
+                    startActivity(intent);
+                }
+            } catch (Exception e) {
+                e.getStackTrace();
+
+            }
+
+
+        } catch (Exception e) {
+            e.getStackTrace();
+        }
+    }
+public void PhoneMiMe(){
+    telephonyManager = (TelephonyManager) getSystemService(this.TELEPHONY_SERVICE);
+    @SuppressLint("MissingPermission") String imeiNumber = telephonyManager.getDeviceId();
+    Log.d("TAG", "Value is created in the MAin Activity Mime" + imeiNumber);
+
+
+
+}
+
+
 }
