@@ -1,46 +1,45 @@
-<?xml version="1.0" encoding="utf-8"?>
-
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical"
+android:layout_width="match_parent"
+android:layout_height="match_parent"
+android:orientation="vertical"
+android:background="@mipmap/back_login"
+android:padding="@dimen/_40sdp">
+
+<EditText
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:paddingTop="10dp"
-    android:paddingBottom="100dp"
-    android:background="@drawable/login_screen_background"
-    android:paddingLeft="24dp"
-    android:scaleType = "centerCrop"
-    android:paddingRight="24dp">
+    android:layout_height="wrap_content"
+    android:inputType="number"
+    android:background="@drawable/edittextstyle"
+    android:ems="10"
+    android:id="@+id/PhoneNumber"
+    android:drawableLeft="@mipmap/account"
+    android:hint="Enter Your Mobile Number"
+    android:layout_marginTop="@dimen/_170sdp"
+    android:textColor="#000000"
+    android:paddingLeft="0dp"
+    android:drawablePadding="@dimen/_5sdp"
+    android:textColorHint="#999"/>
 
-    <EditText
 
-        android:id="@+id/PhoneNumber"
-        android:layout_width="match_parent"
-        android:layout_height="80dp"
-        android:layout_centerVertical="true"
-        android:layout_marginLeft="15dp"
-        android:layout_marginTop="250dp"
-        android:layout_marginRight="15dp"
-        android:layout_marginBottom="20dp"
-        android:background="@drawable/edittextstyle"
-        android:ellipsize="start"
-        android:gravity="center"
-        android:hint="Enter Your Mobile Number"
-        android:inputType="number"
-        android:textSize="20dp" />
+<Button
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginTop="@dimen/_30sdp"
+    android:text="Login"
+    android:id="@+id/Sendffff"
+    android:background="@drawable/buttonstyle"
+    android:layout_gravity="center_horizontal"
+    />
 
-    <Button
-        android:layout_width="match_parent"
-        android:layout_height="80dp"
-        android:layout_centerVertical="true"
-        android:id="@+id/Sendffff"
-        android:layout_marginLeft="15dp"
-        android:layout_marginTop="30dp"
-        android:layout_marginRight="15dp"
-        android:layout_marginBottom="20dp"
-        android:background="@drawable/buttonstyle"
-        android:ellipsize="start"
-        android:gravity="center"
-        android:hint="Login"
-        android:textSize="30dp" />
-
+<!--    <TextView-->
+android:layout_width="wrap_content"
+android:layout_height="wrap_content"
+android:textAppearance="?android:attr/textAppearanceMedium"
+android:text="Forgot password?"
+android:id="@+id/textView3"
+android:layout_gravity="center_horizontal"
+android:layout_marginTop="40dp"
+android:textColor="#FFF"
+/>
+--!>
 </LinearLayout>
