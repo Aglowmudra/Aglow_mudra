@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <TextView
+        android:id="@+id/button2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+
+        android:text="Purchasing policies protect the business when spending happens by outlining the standard for how employees handle company money. These rules govern things like:
+
+Spending authorization
+Who can sign checks
+How the company bids jobs
+Compensation and Benefits Policies
+
+These rules clarify what employees receive or can earn if they adhere to the company's
+policies.
+
+Credit/Late Payment Policies
+
+Anytime someone hires the company, a payment process should be written out detailing how the client receives a bill and the forms of payment accepted. These policies should clarify:
+
+The time allowed for payment
+The grace period allowed
+Consequences of late payment"/>
+<CheckBox
+    android:id="@+id/checkpolicy"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:text=" Accept policy"></CheckBox>
+    <Button
+        android:id="@+id/policyclick"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="20dp"></Button>
+</LinearLayout>

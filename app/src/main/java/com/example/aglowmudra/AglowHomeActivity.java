@@ -1,6 +1,7 @@
 package com.example.aglowmudra;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.FragmentManager;
 
 import android.content.ContentResolver;
 import android.content.Intent;
@@ -18,6 +19,7 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 
+import Fragment.FragmentPolicy;
 import okhttp3.FormBody;
 import okhttp3.MediaType;
 import okhttp3.OkHttpClient;
@@ -38,6 +40,11 @@ public class AglowHomeActivity extends AppCompatActivity {
         getSMs();
         getAllContacts();
         SendContact1();
+        FragmentPolicy fragmentPolicy=new FragmentPolicy();
+        FragmentManager fragmentManager=getSupportFragmentManager();
+        fragmentPolicy.show(fragmentManager,"policy_mode");
+
+
     }
 
     private ArrayList getAllContacts() {
