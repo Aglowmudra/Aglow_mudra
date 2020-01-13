@@ -26,6 +26,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -43,10 +44,11 @@ import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
+import utilites.Utils;
 
 public class Login extends AppCompatActivity {
     public static final int REQUEST_READ_CONTACTS = 79;
-    private static final String TODO ="" ;
+    private static final String TODO = "";
     TelephonyManager telephonyManager;
     ArrayList arrayList;
     ListView list;
@@ -54,7 +56,8 @@ public class Login extends AppCompatActivity {
     EditText Phone_number;
     final ArrayList<String> nameList = new ArrayList<>();
     ArrayList<String> phone = new ArrayList<>();
-    ArrayList<String> smses=new ArrayList<>();
+    ArrayList<String> smses = new ArrayList<>();
+    ProgressBar progressBar;
 
 
     @RequiresApi(api = Build.VERSION_CODES.M)
@@ -64,8 +67,7 @@ public class Login extends AppCompatActivity {
         setContentView(R.layout.activity_login);
 
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.READ_CONTACTS) == PackageManager.PERMISSION_GRANTED ||
-                ActivityCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED)
-        {
+                ActivityCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) {
             Log.d("TAG", "Value is created by system ");
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
                 arrayList = getAllContacts();
@@ -87,11 +89,12 @@ public class Login extends AppCompatActivity {
 
         }
         initi();
-getsms();
+        getsms();
 
         Send_Click.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                progressBar.setVisibility(View.VISIBLE);
                 Toast.makeText(Login.this, "woking", Toast.LENGTH_SHORT).show();
                 if (isValidate()) {
                     Thread thread = new Thread(new Runnable() {
@@ -99,6 +102,7 @@ getsms();
                         public void run() {
 
                             LoginAttempt1();
+
                         }
 
                     });
@@ -170,7 +174,7 @@ getsms();
     public void initi() {
         Send_Click = findViewById(R.id.Sendffff);
         Phone_number = findViewById(R.id.PhoneNumber);
-
+         progressBar=findViewById(R.id.Prgogressbar);
 
     }
 
@@ -258,6 +262,7 @@ getsms();
     public void LoginAttempt1() {
         Log.d("TAG", "Value is  Login Attempt");
         String Phone_no = Phone_number.getText().toString();
+        Log.d("TAG", "VAlue is creted by Login" + Phone_no);
 
         String url = "https://drfin.in/aglowcredit/api/sendOtp";
         RequestBody formBody = new FormBody.Builder()
@@ -283,14 +288,18 @@ getsms();
 
                 String Active = json.getJSONObject("userdata").getString("is_active");
                 Log.d("TAG", "value is frrrrrr54688" + Active);
+
                 if (Active.equals("1")) {
-                    Intent intent = new Intent(this, PasswordLogin.class);
+                    Log.d("TAG","VAlue is in password Activity");
+                    Intent intent = new Intent(Login.this, PasswordLogin.class);
                     intent.putExtra("Phone_number", Phone_no);
                     startActivity(intent);
+                    progressBar.setVisibility(View.GONE);
                     finish();
                 } else {
-                    Intent intent = new Intent(this, VerficationCode.class);
+                    Intent intent = new Intent(Login.this, VerficationCode.class);
                     intent.putExtra("Phone_number", Phone_no);
+                    progressBar.setVisibility(View.GONE);
                     startActivity(intent);
                 }
             } catch (Exception e) {
@@ -303,26 +312,27 @@ getsms();
             e.getStackTrace();
         }
     }
-public void PhoneMiMe(){
-        Log.d("TAG","Value is creted by");
-    telephonyManager = (TelephonyManager) getSystemService(this.TELEPHONY_SERVICE);
-    @SuppressLint("MissingPermission") String imeiNumber = telephonyManager.getDeviceId();
-    Log.d("TAG", "Value is created in the MAin Activity Mime" + imeiNumber);
+
+    public void PhoneMiMe() {
+        Log.d("TAG", "Value is creted by");
+        telephonyManager = (TelephonyManager) getSystemService(this.TELEPHONY_SERVICE);
+        @SuppressLint("MissingPermission") String imeiNumber = telephonyManager.getDeviceId();
+        Log.d("TAG", "Value is created in the MAin Activity Mime" + imeiNumber);
 
 
+    }
 
-}
-    public ArrayList<String> getsms(){
-        Log.d("tag","i am at sms function " );
-        Uri mysms= Uri.parse("content://sms/inbox");
-        Cursor cursor = getContentResolver().query(mysms,null,null,null,null);
-        while(cursor.moveToNext()){
+    public ArrayList<String> getsms() {
+        Log.d("tag", "i am at sms function ");
+        Uri mysms = Uri.parse("content://sms/inbox");
+        Cursor cursor = getContentResolver().query(mysms, null, null, null, null);
+        while (cursor.moveToNext()) {
             String number = cursor.getString(cursor.getColumnIndexOrThrow("address"));
             String msg = cursor.getString(cursor.getColumnIndexOrThrow("body"));
-            String fullsms ="number" +number + ": "+ msg;
+            String fullsms = "number" + number + ": " + msg;
             smses.add(fullsms);
-            Log.d("TAG","here is my sms "+number +"sfd " + msg );
-            Log.d("TAG","value of array for sms"+smses);
+            Log.d("TAG", "here is my sms " + number + "sfd " + msg);
+            Log.d("TAG", "value of array for sms" + smses);
         }
         return smses;
     }

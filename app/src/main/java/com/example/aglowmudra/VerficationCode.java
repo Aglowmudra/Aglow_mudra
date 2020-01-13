@@ -46,6 +46,7 @@ public class VerficationCode extends AppCompatActivity {
             public void onClick(View v) {
                 Log.d("TAG","Value is creted");
                 if (isValidate() && iS_VALIDATE()) {
+//                    Toast.makeText(VerficationCode.this, "working in utton", Toast.LENGTH_SHORT).show();
                     Thread thread = new Thread(new Runnable() {
                         @Override
                         public void run() {
@@ -95,13 +96,26 @@ public class VerficationCode extends AppCompatActivity {
             Log.d("TAG", "VAlue is response223" + responseString);
             try {
                 JSONObject json = new JSONObject(responseString);
-                String Active = json.getJSONObject("userdata").getString("is_active");
-                Log.d("TAG", "value is frrrrrr" + Active);
-                if (Active.equals("0")) {
+
+                String result_code = json.getString("result_code");
+
+                Log.d("TAG", "Value for code" + result_code);
+
+                if (result_code.equals("400")) {
+                    Toast.makeText(this, "hello", Toast.LENGTH_SHORT).show();
+                    Log.d("TAG","Value is creted in 400 code Value");
+                    String text="OTP did not match";
+                    Code_value.setText(text);
+                    Code_value.setHint(text);
+
+
+//                    Toast.makeText(VerficationCode.this, "Check your OTP", Toast.LENGTH_SHORT).show();
+                    Log.d("TAG","Value is creted in 401 code Value");
+                } else {
+                    Log.d("TAG","Value is creted in 200 code Value");
                     Intent intent = new Intent(VerficationCode.this, AglowHomeActivity.class);
                     startActivity(intent);
-                } else {
-                    Toast.makeText(this, "Check your OTP", Toast.LENGTH_SHORT).show();
+
                 }
             } catch (Exception e) {
                 e.getStackTrace();
@@ -130,9 +144,10 @@ public class VerficationCode extends AppCompatActivity {
 
     private boolean iS_VALIDATE() {
         if (Code_value.getText().toString().isEmpty()) {
-            Code_value.setText("Please Enter Otp");
+            Code_value.setError("Please Enter Otp");
             return false;
         }
         return true;
     }
+
 }

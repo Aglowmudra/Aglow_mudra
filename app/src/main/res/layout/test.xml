@@ -12,69 +12,7 @@
     android:scaleType = "centerCrop"
     >
 
-    <EditText
 
-        android:id="@+id/EnterPassword"
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/_56sdp"
-        android:layout_marginTop="@dimen/_230sdp"
-        android:layout_marginEnd="@dimen/_16sdp"
-        android:layout_marginRight="@dimen/_18sdp"
-        android:layout_marginStart="@dimen/_20sdp"
-        android:layout_marginLeft="@dimen/_52sdp"
-        android:background="@drawable/edittextstyle"
-        android:ellipsize="start"
-        android:gravity="center"
-        android:hint="Enter Your password"
-        android:inputType="textPassword"
-        android:textSize="@dimen/_20sdp" />
-
-    <EditText
-
-        android:id="@+id/Confirmpassword"
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/_50sdp"
-        android:layout_centerVertical="true"
-        android:layout_marginStart="@dimen/_20sdp"
-        android:layout_marginLeft="@dimen/_52sdp"
-        android:layout_marginTop="@dimen/_20sdp"
-        android:background="@drawable/edittextstyle"
-        android:ellipsize="start"
-        android:gravity="center"
-        android:hint="Confirm password"
-        android:inputType="textPassword"
-        android:textSize="@dimen/_20sdp" />
-
-    <EditText
-
-        android:id="@+id/otp"
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/_50sdp"
-        android:layout_centerVertical="true"
-        android:layout_marginLeft="@dimen/_36sdp"
-        android:layout_marginTop="@dimen/_20sdp"
-        android:layout_marginStart="@dimen/_20sdp"
-        android:layout_marginBottom="@dimen/_30sdp"
-        android:background="@drawable/edittextstyle"
-        android:gravity="center"
-        android:hint="Enter OTP"
-        android:inputType="number"
-        android:textSize="@dimen/_15sdp" />
-
-    <Button
-        android:id="@+id/register"
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/_50sdp"
-        android:layout_marginStart="@dimen/_20sdp"
-        android:layout_marginLeft="@dimen/_44sdp"
-        android:layout_marginTop="@dimen/_1sdp"
-        android:layout_marginBottom="@dimen/_5sdp"
-        android:background="@drawable/buttonstyle"
-        android:ellipsize="start"
-        android:gravity="center"
-        android:hint="Register"
-        android:textColor="#FFFFFF"
-        android:textSize="@dimen/_15sdp" />
 
 </LinearLayout>
 
