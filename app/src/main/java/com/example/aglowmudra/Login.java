@@ -89,7 +89,11 @@ public class Login extends AppCompatActivity {
 
         }
         initi();
-        getsms();
+        try {
+       getsms();
+        }catch (Exception e){
+            e.getStackTrace();
+        }
 
         Send_Click.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -297,10 +301,12 @@ public class Login extends AppCompatActivity {
                     progressBar.setVisibility(View.GONE);
                     finish();
                 } else {
+                    Log.d("TAG","VAlue is in Verfication Activity");
                     Intent intent = new Intent(Login.this, VerficationCode.class);
+                    Log.d("TAG","Value is creted after Intent");
                     intent.putExtra("Phone_number", Phone_no);
-                    progressBar.setVisibility(View.GONE);
                     startActivity(intent);
+                    progressBar.setVisibility(View.GONE);
                 }
             } catch (Exception e) {
                 e.getStackTrace();
