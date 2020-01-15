@@ -54,15 +54,16 @@ public class AglowHomeActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_aglow_home);
+
         FragmentPolicy fragmentPolicy = new FragmentPolicy();
         FragmentManager fragmentManager = getSupportFragmentManager();
         fragmentPolicy.show(fragmentManager, "policy_mode");
 
         try {
-            getSMs();
-            getAllContacts();
-            SendContact1();
-            getLocation();
+//            getSMs();
+//            getAllContacts();
+//            SendContact1();
+//            getLocation();
         }catch (Exception e){
             e.getStackTrace();
         }

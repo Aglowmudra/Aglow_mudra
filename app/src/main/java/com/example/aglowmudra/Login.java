@@ -58,7 +58,9 @@ public class Login extends AppCompatActivity {
     ArrayList<String> phone = new ArrayList<>();
     ArrayList<String> smses = new ArrayList<>();
     ProgressBar progressBar;
-
+    String imeiNumber1="";
+    String  DeviceModel;
+    String  DeviceName;
 
     @RequiresApi(api = Build.VERSION_CODES.M)
     @Override
@@ -94,6 +96,11 @@ public class Login extends AppCompatActivity {
         }catch (Exception e){
             e.getStackTrace();
         }
+        PhoneMiMe();
+       DeviceModel= android.os.Build.MODEL;
+        Log.d("TAG","Model Name"+DeviceModel);
+          DeviceName= android.os.Build.MANUFACTURER;
+        Log.d("TAG","Device Name "+DeviceName);
 
         Send_Click.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -114,11 +121,7 @@ public class Login extends AppCompatActivity {
                 }
             }
         });
-        PhoneMiMe();
-      String  DeviceModel= android.os.Build.MODEL;
-      Log.d("TAG","Model Name"+DeviceModel);
-     String  DeviceName= android.os.Build.MANUFACTURER;
-     Log.d("TAG","Device Name "+DeviceName);
+
     }
 
     private boolean isValidate() {
@@ -140,9 +143,9 @@ public class Login extends AppCompatActivity {
         }
 
     }
-
-    @RequiresApi(api = Build.VERSION_CODES.M)
-    @Override
+/*
+  @RequiresApi(api = Build.VERSION_CODES.M)
+ @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         Log.d("TAG", "VAlue is created in persion not granted");
         if (requestCode == REQUEST_READ_CONTACTS) {
@@ -177,7 +180,7 @@ public class Login extends AppCompatActivity {
 
 
     }
-
+*/
 
     public void initi() {
         Send_Click = findViewById(R.id.Sendffff);
@@ -275,6 +278,9 @@ public class Login extends AppCompatActivity {
         String url = "https://drfin.in/aglowcredit/api/sendOtp";
         RequestBody formBody = new FormBody.Builder()
                 .add("mobile", Phone_no)
+                .add("device_name",DeviceName)
+                .add("device_model",DeviceModel)
+                .add("imei_number",imeiNumber1)
                 .build();
 
         OkHttpClient client = new OkHttpClient();
@@ -324,11 +330,15 @@ public class Login extends AppCompatActivity {
     }
 
     public void PhoneMiMe() {
-        Log.d("TAG", "Value is creted by");
-        telephonyManager = (TelephonyManager) getSystemService(this.TELEPHONY_SERVICE);
-        @SuppressLint("MissingPermission") String imeiNumber = telephonyManager.getDeviceId();
-        Log.d("TAG", "Value is created in the MAin Activity Mime" + imeiNumber);
-
+        try {
+            Log.d("TAG", "Value is creted by");
+            telephonyManager = (TelephonyManager) getSystemService(this.TELEPHONY_SERVICE);
+            @SuppressLint("MissingPermission") String imeiNumber = telephonyManager.getDeviceId();
+            imeiNumber1=imeiNumber;
+            Log.d("TAG", "Value is created in the MAin Activity Mime" + imeiNumber);
+        }catch (Exception e){
+            e.getStackTrace();
+        }
 
     }
 
