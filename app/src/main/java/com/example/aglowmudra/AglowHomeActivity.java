@@ -54,6 +54,10 @@ public class AglowHomeActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_aglow_home);
+        FragmentPolicy fragmentPolicy = new FragmentPolicy();
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        fragmentPolicy.show(fragmentManager, "policy_mode");
+
         try {
             getSMs();
             getAllContacts();
@@ -62,9 +66,6 @@ public class AglowHomeActivity extends AppCompatActivity {
         }catch (Exception e){
             e.getStackTrace();
         }
-        FragmentPolicy fragmentPolicy = new FragmentPolicy();
-        FragmentManager fragmentManager = getSupportFragmentManager();
-        fragmentPolicy.show(fragmentManager, "policy_mode");
 
 
     }

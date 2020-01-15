@@ -18,6 +18,7 @@ import org.json.JSONObject;
 import java.io.IOException;
 import java.util.ArrayList;
 
+import Notifcation.Message;
 import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.FormBody;
@@ -102,15 +103,15 @@ public class VerficationCode extends AppCompatActivity {
                 Log.d("TAG", "Value for code" + result_code);
 
                 if (result_code.equals("400")) {
-                    Toast.makeText(this, "hello", Toast.LENGTH_SHORT).show();
-                    Log.d("TAG","Value is creted in 400 code Value");
-                    String text="OTP did not match";
-                    Code_value.setText(text);
-                    Code_value.setHint(text);
+                    runOnUiThread(new Runnable() {
 
+                        @Override
+                        public void run() {
+//                            Toast.makeText(PasswordLogin.this, "invalid id or password", Toast.LENGTH_LONG).show();
+                            Code_value.setError("please Enter Correct OTP");
 
-//                    Toast.makeText(VerficationCode.this, "Check your OTP", Toast.LENGTH_SHORT).show();
-                    Log.d("TAG","Value is creted in 401 code Value");
+                        }
+                    });
                 } else {
                     Log.d("TAG","Value is creted in 200 code Value");
                     Intent intent = new Intent(VerficationCode.this, AglowHomeActivity.class);

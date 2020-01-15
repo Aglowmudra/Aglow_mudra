@@ -1,8 +1,10 @@
 package utilites;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
+import android.widget.Toast;
 
 public   class Utils {
    public static SharedPreferences sharedpreferences;
