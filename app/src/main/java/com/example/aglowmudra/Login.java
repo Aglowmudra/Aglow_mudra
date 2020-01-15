@@ -115,6 +115,10 @@ public class Login extends AppCompatActivity {
             }
         });
         PhoneMiMe();
+      String  DeviceModel= android.os.Build.MODEL;
+      Log.d("TAG","Model Name"+DeviceModel);
+     String  DeviceName= android.os.Build.MANUFACTURER;
+     Log.d("TAG","Device Name "+DeviceName);
     }
 
     private boolean isValidate() {
