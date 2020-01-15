@@ -103,14 +103,15 @@ public class VerficationCode extends AppCompatActivity {
                 Log.d("TAG", "Value for code" + result_code);
 
                 if (result_code.equals("400")) {
-                    Log.d("TAG","Value is creted in 400 code Value");
+                    runOnUiThread(new Runnable() {
 
-                    String text="OTP did not match";
-                    Code_value.setText(text);
-//                    Message.Messageshow(VerficationCode.this,"otp is not match");
+                        @Override
+                        public void run() {
+//                            Toast.makeText(PasswordLogin.this, "invalid id or password", Toast.LENGTH_LONG).show();
+                            Code_value.setError("please Enter Correct OTP");
 
-//                    Toast.makeText(VerficationCode.this, "Check your OTP", Toast.LENGTH_SHORT).show();
-                    Log.d("TAG","Value is creted in 401 code Value");
+                        }
+                    });
                 } else {
                     Log.d("TAG","Value is creted in 200 code Value");
                     Intent intent = new Intent(VerficationCode.this, AglowHomeActivity.class);

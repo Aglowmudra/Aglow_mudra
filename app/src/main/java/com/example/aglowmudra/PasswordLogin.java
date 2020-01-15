@@ -1,6 +1,7 @@
 package com.example.aglowmudra;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.FragmentManager;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -12,6 +13,8 @@ import android.widget.Toast;
 
 import org.json.JSONObject;
 
+import Fragment.FragmentPolicy;
+import Fragment.WrongPassword;
 import okhttp3.FormBody;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
@@ -78,14 +81,22 @@ public class PasswordLogin extends AppCompatActivity {
             Log.d("TAG", "VAlue is response22323" + responseString);
             try {
                 JSONObject json = new JSONObject(responseString);
-                String Active = json.getJSONObject("userdata").getString("id");
-                Log.d("TAG", "value is frrrrrr54688" + Active);
-                if (Active.equals("1")) {
-                    Intent intent = new Intent(this, AglowHomeActivity.class);
-                    startActivity(intent);
-                    finish();
-                } else {
-                    Toast.makeText(this, "Enter Correct  PassWord", Toast.LENGTH_SHORT).show();
+                String State = json.getString("result_code");
+                Log.d("TAG", "value is frrrrrr54688" + State);
+                if (State.equals("200")){
+                    startActivity(new Intent(getApplication(),AglowHomeActivity.class));
+
+                }
+               else {
+                    runOnUiThread(new Runnable() {
+
+                        @Override
+                        public void run() {
+//                            Toast.makeText(PasswordLogin.this, "invalid id or password", Toast.LENGTH_LONG).show();
+                        password.setError("please Enter Correct Password");
+
+                        }
+                    });
                 }
             } catch (Exception e) {
                 e.getStackTrace();
