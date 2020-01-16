@@ -13,9 +13,10 @@
         android:ems="10"
         android:id="@+id/EnterPassword"
         android:drawableLeft="@mipmap/account"
+
         android:hint="Enter Your Password"
         android:layout_marginTop="@dimen/_170sdp"
-        android:textColor="#000000"
+        android:textColor="#F7F6F6"
         android:paddingLeft="0dp"
         android:drawablePadding="@dimen/_5sdp"
         android:textColorHint="#999"/>
@@ -48,6 +49,19 @@
         android:paddingLeft="0dp"
         android:drawablePadding="@dimen/_5sdp"
         android:textColorHint="#999"/>
+    <TextView
+android:visibility="gone"
+        android:id="@+id/resendotp"
+        android:layout_marginTop="10dp"
+
+        android:textSize="25dp"
+      android:layout_marginStart="140dp"
+        android:textStyle="normal"
+        android:textColor="#fff"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Resend OTP"
+        android:layout_marginLeft="180dp" />
     <Button
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

@@ -4,10 +4,12 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.CountDownTimer;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.gson.JsonIOException;
@@ -33,6 +35,8 @@ public class VerficationCode extends AppCompatActivity {
     EditText Code_value;
     String Phone_number;
     EditText Passsword, ConformPassword;
+    TextView Resend;
+    String value = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,20 +46,37 @@ public class VerficationCode extends AppCompatActivity {
         Intent intent = getIntent();
         Phone_number = intent.getStringExtra("Phone_number");
         Log.d("TAG", "VAlue od code phone" + Phone_number);
+        CountTime();
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Log.d("TAG","Value is creted");
+                Log.d("TAG", "Value is creted");
                 if (isValidate() && iS_VALIDATE()) {
 //                    Toast.makeText(VerficationCode.this, "working in utton", Toast.LENGTH_SHORT).show();
                     Thread thread = new Thread(new Runnable() {
                         @Override
                         public void run() {
                             SendOtpApi();
+
                         }
                     });
                     thread.start();
                 }
+
+            }
+        });
+        Resend.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Resend.setVisibility(View.GONE);
+                Thread thread=new Thread(new Runnable() {
+                    @Override
+                    public void run() {
+                        Resend_Otp();
+
+                    }
+                });
+                thread.start();
 
             }
         });
@@ -67,6 +88,7 @@ public class VerficationCode extends AppCompatActivity {
         Code_value = (EditText) findViewById(R.id.otp);
         Passsword = findViewById(R.id.EnterPassword);
         ConformPassword = findViewById(R.id.Confirmpassword);
+        Resend = findViewById(R.id.resendotp);
 
     }
 
@@ -113,7 +135,7 @@ public class VerficationCode extends AppCompatActivity {
                         }
                     });
                 } else {
-                    Log.d("TAG","Value is creted in 200 code Value");
+                    Log.d("TAG", "Value is creted in 200 code Value");
                     Intent intent = new Intent(VerficationCode.this, AglowHomeActivity.class);
                     startActivity(intent);
 
@@ -151,4 +173,60 @@ public class VerficationCode extends AppCompatActivity {
         return true;
     }
 
+    public void count() {
+        new CountDownTimer(30000, 1000) {
+            public void onTick(long millisUntilFinished) {
+//                mTextField.setText("seconds remaining: " + millisUntilFinished / 1000);
+            }
+
+            public void onFinish() {
+//                mTextField.setText("done!");
+            }
+        }.start();
+
+    }
+
+    public void Resend_Otp() {
+        Intent intent = getIntent();
+        Phone_number = intent.getStringExtra("Phone_number");
+       Log.d("TAG","VAlue is created"+Phone_number);
+
+        String url = "https://drfin.in/aglowcredit/api/sendOtp";
+        RequestBody formBody = new FormBody.Builder()
+                .add("mobile", Phone_number)
+                .build();
+
+        OkHttpClient client = new OkHttpClient();
+        Request request = new Request.Builder()
+                .url(url)
+                .post(formBody)
+                .build();
+
+
+        try {
+            Response response = client.newCall(request).execute();
+            Log.d("TAG", "Alue is response1V" + response);
+            String responseString = response.body().string();
+
+            Log.d("TAG", "VAlue is response in Resend Actcivity" + responseString);
+
+        }catch (Exception e){
+            e.getStackTrace();
+        }
+    }
+
+
+
+    public void CountTime() {
+        new CountDownTimer(30000, 1000) {
+            public void onTick(long millisUntilFinished) {
+                Code_value.setText("                   " + millisUntilFinished / 1000);
+            }
+
+            public void onFinish() {
+                Code_value.setText("");
+                Resend.setVisibility(View.VISIBLE);
+            }
+        }.start();
+    }
 }
