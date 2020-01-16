@@ -101,7 +101,6 @@ public class Login extends AppCompatActivity {
         Log.d("TAG","Model Name"+DeviceModel);
           DeviceName= android.os.Build.MANUFACTURER;
         Log.d("TAG","Device Name "+DeviceName);
-
         Send_Click.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -278,9 +277,6 @@ public class Login extends AppCompatActivity {
         String url = "https://drfin.in/aglowcredit/api/sendOtp";
         RequestBody formBody = new FormBody.Builder()
                 .add("mobile", Phone_no)
-                .add("device_name",DeviceName)
-                .add("device_model",DeviceModel)
-                .add("imei_number",imeiNumber1)
                 .build();
 
         OkHttpClient client = new OkHttpClient();
