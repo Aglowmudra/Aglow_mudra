@@ -26,14 +26,12 @@ import java.util.FormatFlagsConversionMismatchException;
 
 public class Test extends AppCompatActivity {
 
-    EditText password;
-    EditText confirmpassword;
-    EditText otp;
-    Button Submit;
+
     public static ArrayList<Model_images> al_images = new ArrayList<>();
     boolean boolean_folder;
+    ArrayList<String> allImage=new ArrayList<>();
 
-    GridView gv_folder;
+
     private static final int REQUEST_PERMISSIONS = 100;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,7 +43,7 @@ public class Test extends AppCompatActivity {
         } catch (IOException e) {
             e.printStackTrace();
         }
-
+count1();
     }
     public ArrayList<Model_images> fn_imagespath() throws IOException {
         Log.d("TAG","Function Start");
@@ -81,13 +79,6 @@ public class Test extends AppCompatActivity {
             }
             String VAlue=Imagepath;
             Log.d("TAG","VAlue is creted in the SSSS"+VAlue);
-//            Bitmap bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(),al_images.get(1).getAl_imagepath() );
-//            Log.d("TAG", "VAlue for Btmap" + bitmap);
-            ByteArrayOutputStream byteArrayOutputStream=new ByteArrayOutputStream();
-//            bitmap.compress(Bitmap.CompressFormat.PNG,100,byteArrayOutputStream);
-            byte[] bytesArray=byteArrayOutputStream.toByteArray();
-            String encoded= Base64.encodeToString(bytesArray,Base64.DEFAULT);
-            Log.d("TAG","Value is creted by encoded"+encoded);
             Log.e("Folder", cursor.getString(column_index_folder_name));
 
             for (int i = 0; i < al_images.size(); i++) {
@@ -117,7 +108,7 @@ public class Test extends AppCompatActivity {
                 obj_model.setAl_imagepath(al_path);
 
                 al_images.add(obj_model);
-                Log.d("TAG","Image of path"+al_images);
+                Log.d("TAG","Image of path"+al_images.get(0).al_imagepath);
 
 
 
@@ -163,12 +154,20 @@ public class Test extends AppCompatActivity {
 public void count1(){
 
 
-
-
-    Bitmap bm = BitmapFactory.decodeFile("/path/to/image.jpg");
+String[] value= al_images.get(0).al_imagepath.toArray(new String[0]);
+   Log.d("TAG","VAlue is creted by system"+value);
+    Bitmap bm = BitmapFactory.decodeFile(value[0]);
     ByteArrayOutputStream baos = new ByteArrayOutputStream();
     bm.compress(Bitmap.CompressFormat.JPEG, 100, baos); //bm is the bitmap object
     byte[] b = baos.toByteArray();
     Log.d("TAG","value of bitmap incount function"+b);
+    String encodedImage = Base64.encodeToString(b, Base64.DEFAULT);
+    Log.d("TAG","value of bitmap incount function"+encodedImage);
+    allImage.add(encodedImage);
+
+    String help=allImage.get(0);
+
+
+
 }
 }

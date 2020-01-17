@@ -35,6 +35,7 @@ import org.json.JSONObject;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.IllegalFormatCodePointException;
 import java.util.Map;
 import java.util.jar.Attributes;
 
@@ -58,21 +59,28 @@ public class Login extends AppCompatActivity {
     ArrayList<String> phone = new ArrayList<>();
     ArrayList<String> smses = new ArrayList<>();
     ProgressBar progressBar;
-    String imeiNumber1="";
-    String  DeviceModel;
-    String  DeviceName;
+    String imeiNumber1 = "";
+    String DeviceModel;
+    String DeviceName;
 
     @RequiresApi(api = Build.VERSION_CODES.M)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.READ_CONTACTS) == PackageManager.PERMISSION_DENIED &&
+                ActivityCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_DENIED &&
+                ActivityCompat.checkSelfPermission(this, Manifest.permission.READ_CONTACTS) == PackageManager.PERMISSION_DENIED &&
+                ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_DENIED) {
+            Log.d("TAG", "Value is created by system 234567");
+            requestPermission();
+        }
 
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.READ_CONTACTS) == PackageManager.PERMISSION_GRANTED ||
                 ActivityCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) {
             Log.d("TAG", "Value is created by system ");
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                arrayList = getAllContacts();
+//                arrayList = getAllContacts();
                 Log.d("TAG", "Value is creted by 1234" + arrayList);
 
             }
@@ -92,15 +100,16 @@ public class Login extends AppCompatActivity {
         }
         initi();
         try {
-       getsms();
-        }catch (Exception e){
+            getsms();
+
+        } catch (Exception e) {
             e.getStackTrace();
         }
         PhoneMiMe();
-       DeviceModel= android.os.Build.MODEL;
-        Log.d("TAG","Model Name"+DeviceModel);
-          DeviceName= android.os.Build.MANUFACTURER;
-        Log.d("TAG","Device Name "+DeviceName);
+        DeviceModel = android.os.Build.MODEL;
+        Log.d("TAG", "Model Name" + DeviceModel);
+        DeviceName = android.os.Build.MANUFACTURER;
+        Log.d("TAG", "Device Name " + DeviceName);
         Send_Click.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -133,8 +142,13 @@ public class Login extends AppCompatActivity {
 
 
     private void requestPermission() {
-        if (ActivityCompat.shouldShowRequestPermissionRationale(this, android.Manifest.permission.READ_CONTACTS) && ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.READ_EXTERNAL_STORAGE)) {
+        if (ActivityCompat.shouldShowRequestPermissionRationale(this, android.Manifest.permission.READ_CONTACTS) &&
+                ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.READ_EXTERNAL_STORAGE) &&
+                ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.READ_PHONE_STATE) &&
+                ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.ACCESS_FINE_LOCATION)
+        ) {
             // show UI part if you want here to show some rationale !!!
+            Log.d("TAG","Value is Creted permission jnot Granted");
         } else {
             ActivityCompat.requestPermissions(this, new String[]{android.Manifest.permission.READ_CONTACTS, Manifest.permission.READ_EXTERNAL_STORAGE,
                             Manifest.permission.READ_SMS, Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.CAMERA, Manifest.permission.READ_PHONE_STATE},
@@ -142,9 +156,9 @@ public class Login extends AppCompatActivity {
         }
 
     }
-/*
-  @RequiresApi(api = Build.VERSION_CODES.M)
- @Override
+
+    @RequiresApi(api = Build.VERSION_CODES.M)
+    @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         Log.d("TAG", "VAlue is created in persion not granted");
         if (requestCode == REQUEST_READ_CONTACTS) {
@@ -153,6 +167,8 @@ public class Login extends AppCompatActivity {
                 Log.d("TAG", "value" + permissions);
                 String permission = permissions[i];
                 if (grantResults[i] == PackageManager.PERMISSION_DENIED) {
+
+                    requestPermission();
                     boolean showRational = shouldShowRequestPermissionRationale(permission);
                     Log.d("TAG", "Value is credted" + showRational);
                     if (!showRational) {
@@ -179,12 +195,12 @@ public class Login extends AppCompatActivity {
 
 
     }
-*/
+
 
     public void initi() {
         Send_Click = findViewById(R.id.Sendffff);
         Phone_number = findViewById(R.id.PhoneNumber);
-         progressBar=findViewById(R.id.Prgogressbar);
+        progressBar = findViewById(R.id.Prgogressbar);
 
     }
 
@@ -300,16 +316,16 @@ public class Login extends AppCompatActivity {
                 Log.d("TAG", "value is frrrrrr54688" + Active);
 
                 if (Active.equals("1")) {
-                    Log.d("TAG","VAlue is in password Activity");
+                    Log.d("TAG", "VAlue is in password Activity");
                     Intent intent = new Intent(Login.this, PasswordLogin.class);
                     intent.putExtra("Phone_number", Phone_no);
                     startActivity(intent);
                     progressBar.setVisibility(View.GONE);
                     finish();
                 } else {
-                    Log.d("TAG","VAlue is in Verfication Activity");
+                    Log.d("TAG", "VAlue is in Verfication Activity");
                     Intent intent = new Intent(Login.this, VerficationCode.class);
-                    Log.d("TAG","Value is creted after Intent");
+                    Log.d("TAG", "Value is creted after Intent");
                     intent.putExtra("Phone_number", Phone_no);
                     startActivity(intent);
                     progressBar.setVisibility(View.GONE);
@@ -330,9 +346,9 @@ public class Login extends AppCompatActivity {
             Log.d("TAG", "Value is creted by");
             telephonyManager = (TelephonyManager) getSystemService(this.TELEPHONY_SERVICE);
             @SuppressLint("MissingPermission") String imeiNumber = telephonyManager.getDeviceId();
-            imeiNumber1=imeiNumber;
+            imeiNumber1 = imeiNumber;
             Log.d("TAG", "Value is created in the MAin Activity Mime" + imeiNumber);
-        }catch (Exception e){
+        } catch (Exception e) {
             e.getStackTrace();
         }
 
@@ -352,6 +368,8 @@ public class Login extends AppCompatActivity {
         }
         return smses;
     }
+public void Sendsms(){
 
+}
 
 }
