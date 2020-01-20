@@ -1,6 +1,7 @@
 package com.example.aglowmudra;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.util.LogWriter;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -17,7 +18,7 @@ public class Splash_Screen extends AppCompatActivity {
             new Handler().postDelayed(new Runnable() {
                 @Override
                 public void run() {
-                    Intent intent = new Intent(Splash_Screen.this, Test.class);
+                    Intent intent = new Intent(Splash_Screen.this,Login.class);
                     startActivity(intent);
                     finish();
                 }

@@ -220,11 +220,11 @@ public class VerficationCode extends AppCompatActivity {
     public void CountTime() {
         new CountDownTimer(30000, 1000) {
             public void onTick(long millisUntilFinished) {
-                Code_value.setError("                   " + millisUntilFinished / 1000);
+               Resend.setText("" + millisUntilFinished / 1000);
             }
 
             public void onFinish() {
-                Code_value.setText("");
+
                 Resend.setVisibility(View.VISIBLE);
             }
         }.start();

