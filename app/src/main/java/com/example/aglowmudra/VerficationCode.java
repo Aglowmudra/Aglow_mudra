@@ -10,21 +10,8 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
-import android.widget.Toast;
-
-import com.google.gson.JsonIOException;
-
-import org.json.JSONArray;
 import org.json.JSONObject;
-
-import java.io.IOException;
-import java.util.ArrayList;
-
-import Notifcation.Message;
-import okhttp3.Call;
-import okhttp3.Callback;
 import okhttp3.FormBody;
-import okhttp3.MediaType;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.RequestBody;
@@ -227,7 +214,7 @@ public class VerficationCode extends AppCompatActivity {
             }
 
             public void onFinish() {
-                Register.setText("");
+
                 Resend.setVisibility(View.VISIBLE);
                 Resend.setText("Rsend OTP");
             }
