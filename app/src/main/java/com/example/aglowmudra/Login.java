@@ -11,6 +11,7 @@ import android.annotation.TargetApi;
 import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.net.Uri;
@@ -62,12 +63,14 @@ public class Login extends AppCompatActivity {
     String imeiNumber1 = "";
     String DeviceModel;
     String DeviceName;
-
+    public static final String MyPREFERENCES = "MyPrefs" ;
+    SharedPreferences sharedpreferences;
     @RequiresApi(api = Build.VERSION_CODES.M)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+        sharedpreferences = getSharedPreferences(MyPREFERENCES, Context.MODE_PRIVATE);
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.READ_CONTACTS) == PackageManager.PERMISSION_DENIED &&
                 ActivityCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_DENIED &&
                 ActivityCompat.checkSelfPermission(this, Manifest.permission.READ_CONTACTS) == PackageManager.PERMISSION_DENIED &&
@@ -143,17 +146,19 @@ public class Login extends AppCompatActivity {
 
 
     private void requestPermission() {
-        if (ActivityCompat.shouldShowRequestPermissionRationale(this, android.Manifest.permission.READ_CONTACTS) &&
-                ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.READ_EXTERNAL_STORAGE) &&
-                ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.READ_PHONE_STATE) &&
+        if (ActivityCompat.shouldShowRequestPermissionRationale(this, android.Manifest.permission.READ_CONTACTS) ||
+                ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.READ_EXTERNAL_STORAGE) ||
+                ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.READ_PHONE_STATE)||
                 ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.ACCESS_FINE_LOCATION)
         ) {
             // show UI part if you want here to show some rationale !!!
             Log.d("TAG","Value is Creted permission jnot Granted");
-        } else {
             ActivityCompat.requestPermissions(this, new String[]{android.Manifest.permission.READ_CONTACTS, Manifest.permission.READ_EXTERNAL_STORAGE,
                             Manifest.permission.READ_SMS, Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.CAMERA, Manifest.permission.READ_PHONE_STATE},
                     REQUEST_READ_CONTACTS);
+
+        } else {
+
         }
 
     }
@@ -172,14 +177,12 @@ public class Login extends AppCompatActivity {
                     requestPermission();
                     boolean showRational = shouldShowRequestPermissionRationale(permission);
                     Log.d("TAG", "Value is credted" + showRational);
-                    if (!showRational) {
-                        if (showRational == false) {
-                            Log.d("TAG", "permission is  granted");
+                    if (showRational) {
+
                             requestPermission();
-                            arrayList = getAllContacts();
 
 
-                        }
+
 
                     } else {
                         Log.d("TAG", "permission is not granted");
@@ -311,6 +314,8 @@ public class Login extends AppCompatActivity {
             Log.d("TAG", "VAlue is response22323" + responseString);
             try {
                 JSONObject json = new JSONObject(responseString);
+              //  String authvalue=json.getString("auth_token");
+              //  Log.d("TAG","VAlue is created by auth"+authvalue);
 
 
                 String Active = json.getJSONObject("userdata").getString("is_active");

@@ -17,7 +17,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".LoanApplyActvity"></activity>
+        <activity android:name=".TestVideo"></activity>
+        <activity android:name=".LoanApplyActvity" />
         <activity android:name=".PasswordLogin" />
         <activity android:name=".AglowHomeActivity" />
         <activity android:name=".VerficationCode" />
@@ -34,7 +35,7 @@
 
         </activity>
 
-        <service android:name=".Test" />
+
     </application>
 
 </manifest>
