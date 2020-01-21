@@ -68,11 +68,14 @@ public class VerficationCode extends AppCompatActivity {
         Resend.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
                 Resend.setVisibility(View.GONE);
+                count();
                 Thread thread=new Thread(new Runnable() {
                     @Override
                     public void run() {
                         Resend_Otp();
+
 
                     }
                 });
@@ -226,6 +229,7 @@ public class VerficationCode extends AppCompatActivity {
             public void onFinish() {
                 Register.setText("");
                 Resend.setVisibility(View.VISIBLE);
+                Resend.setText("Rsend OTP");
             }
         }.start();
     }

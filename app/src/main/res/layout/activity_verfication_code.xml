@@ -5,42 +5,42 @@
     android:background="@mipmap/login_bg"
     android:padding="@dimen/_40sdp">
 
-    <EditText
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/_40sdp"
-        android:inputType="textPassword"
-        android:background="@drawable/edittextstyleround"
-        android:ems="10"
-        android:id="@+id/EnterPassword"
-        android:drawableLeft="@mipmap/account"
+  <EditText
+      android:layout_width="match_parent"
+      android:layout_height="@dimen/_40sdp"
+      android:inputType="textPassword"
 
-        android:hint="Enter Your Password"
-        android:layout_marginTop="@dimen/_170sdp"
-        android:textColor="#F7F6F6"
-        android:paddingLeft="0dp"
-        android:drawablePadding="@dimen/_5sdp"
-        android:textColorHint="#999"/>
+      android:ems="10"
+      android:id="@+id/EnterPassword"
+      android:drawableLeft="@mipmap/account"
 
-    <EditText
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/_40sdp"
-        android:inputType="textPassword"
-        android:background="@drawable/edittextstyleround"
-        android:ems="10"
-        android:id="@+id/Confirmpassword"
-        android:drawableLeft="@mipmap/lock"
-        android:hint="Re-enter Password"
-        android:layout_marginTop="@dimen/_10sdp"
+      android:hint="Enter Your Password"
+      android:layout_marginTop="@dimen/_170sdp"
+      android:textColor="#000000"
+      android:paddingLeft="0dp"
+      android:drawablePadding="@dimen/_5sdp"
+      android:textColorHint="#999"/>
 
-        android:textColor="#000000"
-        android:paddingLeft="0dp"
-        android:drawablePadding="@dimen/_5sdp"
-        android:textColorHint="#999"/>
-<LinearLayout
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:orientation="horizontal"
-    android:weightSum="1">
+  <EditText
+      android:layout_width="match_parent"
+      android:layout_height="@dimen/_40sdp"
+      android:inputType="textPassword"
+
+      android:ems="10"
+      android:id="@+id/Confirmpassword"
+      android:drawableLeft="@mipmap/lock"
+      android:hint="Re-enter Password"
+      android:layout_marginTop="@dimen/_10sdp"
+
+      android:textColor="#000000"
+      android:paddingLeft="0dp"
+      android:drawablePadding="@dimen/_5sdp"
+      android:textColorHint="#999"/>
+  <LinearLayout
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:orientation="horizontal"
+      android:weightSum="1">
 
     <EditText
         android:id="@+id/otp"
@@ -51,7 +51,7 @@
         android:layout_weight="0.5"
         android:drawableLeft="@mipmap/lock"
         android:drawablePadding="@dimen/_5sdp"
-        android:background="@drawable/edittextstyleround"
+
         android:ems="10"
         android:hint="Enter OTP"
         android:inputType="number"
@@ -69,28 +69,26 @@
 
         android:gravity="center"
         android:text="Resend OTP" />
+  </LinearLayout>
+  <Button
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:layout_marginTop="@dimen/_30sdp"
+      android:text="Register"
+      android:id="@+id/register"
+      android:background="@drawable/buttonstyle"
+      android:layout_gravity="center_horizontal"
+      />
+
+  <!--    <TextView-->
+  android:layout_width="wrap_content"
+  android:layout_height="wrap_content"
+  android:textAppearance="?android:attr/textAppearanceMedium"
+  android:text="Forgot password?"
+  android:id="@+id/textView3"
+  android:layout_gravity="center_horizontal"
+  android:layout_marginTop="40dp"
+  android:textColor="#FFF"
+  />
+  --!>
 </LinearLayout>
-    <Button
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/_30sdp"
-        android:text="Register"
-        android:id="@+id/register"
-        android:background="@drawable/buttonstyle"
-        android:layout_gravity="center_horizontal"
-       />
-
-<!--    <TextView-->
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceMedium"
-        android:text="Forgot password?"
-        android:id="@+id/textView3"
-        android:layout_gravity="center_horizontal"
-        android:layout_marginTop="40dp"
-        android:textColor="#FFF"
-        />
---!>
-</LinearLayout>
-
-
