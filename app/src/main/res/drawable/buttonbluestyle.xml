@@ -7,13 +7,13 @@
     android:shape="rectangle">
     <stroke android:width="3dp"
 
-        android:color="#C8C8C8"/>
-    <corners android:radius="2dp" />
+        android:color="#0000A0"/>
+    <corners android:radius="32dp" />
     <gradient
 
-        android:startColor="#FFFFFF"
+        android:startColor="#0000A0"
 
-        android:endColor="#FFFFFF"
+        android:endColor="#0000A0"
 
         android:type="linear"
 

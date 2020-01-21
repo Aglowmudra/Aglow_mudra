@@ -1,0 +1,29 @@
+<RelativeLayout android:id="@+id/relativeLayout"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:gravity="center_horizontal"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:orientation="vertical"
+    android:background="@drawable/loan_screentwo"
+    android:scaleType="fitXY"
+    android:padding="@dimen/_40sdp">
+
+
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/_40sdp"
+        android:background="@drawable/buttonstyle"
+        android:layout_gravity="center_horizontal"
+        android:id="@+id/btnApply"
+        android:hint="Apply"
+        android:layout_marginTop="@dimen/_300sdp"
+        android:textColor="#000000"
+       />
+
+
+
+</LinearLayout>
+</RelativeLayout>

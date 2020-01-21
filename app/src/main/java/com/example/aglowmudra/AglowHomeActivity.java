@@ -7,7 +7,6 @@ import androidx.fragment.app.FragmentManager;
 import android.Manifest;
 import android.content.ContentResolver;
 import android.content.Context;
-import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.location.Address;
@@ -19,10 +18,6 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.ContactsContract;
-import android.provider.Telephony;
-import android.telephony.SmsManager;
-import android.telephony.SmsMessage;
-import android.telephony.TelephonyManager;
 import android.util.Log;
 
 import org.json.JSONObject;
@@ -31,20 +26,16 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
-import Fragment.FragmentPolicy;
 import okhttp3.FormBody;
-import okhttp3.MediaType;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
 
-import static android.provider.Telephony.Sms.CONTENT_URI;
-
 public class AglowHomeActivity extends AppCompatActivity {
     final ArrayList<String> nameList = new ArrayList<>();
     ArrayList<String> phone = new ArrayList<>();
-  double latitute;
+   double latitute;
   double longitude;
     String val1="";
     String val2="";

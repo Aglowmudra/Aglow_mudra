@@ -153,19 +153,25 @@ count1();
     }
 public void count1(){
 
+try {
+    for (int i=0;i<al_images.size();i++) {
+        String[] value = al_images.get(i).al_imagepath.toArray(new String[i]);
+        Log.d("TAG", "VAlue is creted by system" + value);
+        Bitmap bm = BitmapFactory.decodeFile(value[i]);
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        bm.compress(Bitmap.CompressFormat.PNG, 100, baos); //bm is the bitmap object
+        byte[] b = baos.toByteArray();
+        Log.d("TAG", "value of bitmap incount function" + b);
+        String encodedImage = Base64.encodeToString(b, Base64.NO_WRAP);
 
-String[] value= al_images.get(0).al_imagepath.toArray(new String[0]);
-   Log.d("TAG","VAlue is creted by system"+value);
-    Bitmap bm = BitmapFactory.decodeFile(value[0]);
-    ByteArrayOutputStream baos = new ByteArrayOutputStream();
-    bm.compress(Bitmap.CompressFormat.JPEG, 100, baos); //bm is the bitmap object
-    byte[] b = baos.toByteArray();
-    Log.d("TAG","value of bitmap incount function"+b);
-    String encodedImage = Base64.encodeToString(b, Base64.DEFAULT);
-    Log.d("TAG","value of bitmap incount function"+encodedImage);
-    allImage.add(encodedImage);
+        Log.d("TAG", "value of bitmap incount function" + encodedImage);
+   allImage.add(encodedImage);
 
-    String help=allImage.get(0);
+//   String help = allImage.get(0);
+    }
+}catch (Exception e){
+    e.getStackTrace();
+}
 
 
 

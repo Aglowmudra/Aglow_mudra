@@ -1,73 +1,54 @@
 package com.example.aglowmudra;
 
-import androidx.annotation.RequiresApi;
-import androidx.appcompat.app.AppCompatActivity;
 
-
-import android.annotation.SuppressLint;
-
-import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
-import android.provider.MediaStore;
-import android.util.Base64;
-import android.util.Log;
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.util.ArrayList;
+import android.view.MenuItem;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.RequiresApi;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
+
+import com.google.android.material.bottomnavigation.BottomNavigationView;
+
 public class MainActivity extends AppCompatActivity {
-    private String encodedImageString = null;
-    private static final int PICK_IMAGE_REQUEST = 100;
-    ArrayList<String> arrayList=new ArrayList<>();
 
     @RequiresApi(api = Build.VERSION_CODES.KITKAT)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
-        intent.setType("image/*");
-        startActivityForResult(intent, PICK_IMAGE_REQUEST);
+        BottomNavigationView bottomNavigationView = (BottomNavigationView)
+                findViewById(R.id.navigation);
 
-    }
-
-    @SuppressLint("MissingSuperCall")
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        switch (requestCode) {
-            case PICK_IMAGE_REQUEST:
-                if (resultCode == RESULT_OK) {
-
-                    Uri selectedImage = data.getData();
-                    Log.d("TAG","value of selectpath"+selectedImage);
-
-                    // method 1
-                 try {
-                        Bitmap bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(),selectedImage);
-                        Log.d("TAG", "VAlue for Btmap" + bitmap);
-                        ByteArrayOutputStream byteArrayOutputStream=new ByteArrayOutputStream();
-                        bitmap.compress(Bitmap.CompressFormat.JPEG,100,byteArrayOutputStream);
-                        byte[] bytesArray=byteArrayOutputStream.toByteArray();
-                        String encoded=Base64.encodeToString(bytesArray,Base64.DEFAULT);
-                        Log.d("TAG","Value is creted by encoded"+encoded);
-
-
-                    } catch (IOException e) {
-                        e.printStackTrace();
+        bottomNavigationView.setOnNavigationItemSelectedListener
+                (new BottomNavigationView.OnNavigationItemSelectedListener() {
+                    @Override
+                    public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+                        Fragment selectedFragment = null;
+                        switch (item.getItemId()) {
+                            case R.id.action_item1:
+                                selectedFragment = LoanFragment.newInstance();
+                                break;
+                            case R.id.action_item2:
+                                selectedFragment = ApplicantProfileFragment.newInstance();
+                                break;
+                        }
+                        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+                        transaction.replace(R.id.frame_layout, selectedFragment);
+                        transaction.commit();
+                        return true;
                     }
-                  Bitmap bm = BitmapFactory.decodeFile("storage/emulated/0/DCIM/Camera/IMG_20200115_232429.jpg");
-                    ByteArrayOutputStream baos = new ByteArrayOutputStream();
-                    bm.compress(Bitmap.CompressFormat.JPEG, 100, baos); //bm is the bitmap object
-                    byte[] b = baos.toByteArray();
+                });
 
-                    String encodedImage = Base64.encodeToString(b, Base64.DEFAULT);
-                    Log.d("TAG","value of bitmap incount function"+encodedImage);
-                }
-        }
+        //Manually displaying the first fragment - one time only
+        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+        transaction.replace(R.id.frame_layout, LoanFragment.newInstance());
+        transaction.commit();
+
+        //Used to select an item programmatically
+        //bottomNavigationView.getMenu().getItem(2).setChecked(true);
     }
-
-
 }

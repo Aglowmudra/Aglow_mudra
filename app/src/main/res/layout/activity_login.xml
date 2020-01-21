@@ -2,12 +2,12 @@
 android:layout_width="match_parent"
 android:layout_height="match_parent"
 android:orientation="vertical"
-android:background="@mipmap/back_login"
+android:background="@mipmap/login_bg"
 android:padding="@dimen/_40sdp">
 
 <EditText
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
+    android:layout_height="@dimen/_40sdp"
     android:inputType="number"
     android:background="@drawable/edittextstyle"
     android:ems="10"
@@ -44,7 +44,7 @@ android:textColor="#FFF"
 --!>
     <ProgressBar
         android:id="@+id/Prgogressbar"
-        android:layout_marginTop="120dp"
+        android:layout_marginTop="@dimen/_120sdp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:visibility="gone"

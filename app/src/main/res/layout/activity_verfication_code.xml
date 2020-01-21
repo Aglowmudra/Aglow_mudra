@@ -2,14 +2,14 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:background="@mipmap/back_login"
+    android:background="@mipmap/login_bg"
     android:padding="@dimen/_40sdp">
 
     <EditText
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:inputType="textEmailAddress"
-        android:background="@drawable/edittextstyle"
+        android:layout_height="@dimen/_40sdp"
+        android:inputType="textPassword"
+        android:background="@drawable/edittextstyleround"
         android:ems="10"
         android:id="@+id/EnterPassword"
         android:drawableLeft="@mipmap/account"
@@ -23,45 +23,53 @@
 
     <EditText
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="@dimen/_40sdp"
         android:inputType="textPassword"
-        android:background="@drawable/edittextstyle"
+        android:background="@drawable/edittextstyleround"
         android:ems="10"
         android:id="@+id/Confirmpassword"
         android:drawableLeft="@mipmap/lock"
-        android:hint="Confirm Password"
+        android:hint="Re-enter Password"
         android:layout_marginTop="@dimen/_10sdp"
-        android:textColor="#000000"
-        android:paddingLeft="0dp"
-        android:drawablePadding="@dimen/_5sdp"
-        android:textColorHint="#999"/>
-    <EditText
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:inputType="number"
-        android:background="@drawable/edittextstyle"
-        android:ems="10"
-        android:id="@+id/otp"
-        android:drawableLeft="@mipmap/lock"
-        android:hint="Enter OTP"
-        android:layout_marginTop="@dimen/_10sdp"
-        android:textColor="#000000"
-        android:paddingLeft="0dp"
-        android:drawablePadding="@dimen/_5sdp"
-        android:textColorHint="#999"/>
-    <TextView
-android:visibility="gone"
-        android:id="@+id/resendotp"
-        android:layout_marginTop="10dp"
 
-        android:textSize="25dp"
-      android:layout_marginStart="140dp"
-        android:textStyle="normal"
-        android:textColor="#fff"
+        android:textColor="#000000"
+        android:paddingLeft="0dp"
+        android:drawablePadding="@dimen/_5sdp"
+        android:textColorHint="#999"/>
+<LinearLayout
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    android:weightSum="1">
+
+    <EditText
+        android:id="@+id/otp"
+        android:layout_width="@dimen/_170sdp"
+        android:layout_height="@dimen/_40sdp"
+        android:layout_gravity="center"
+        android:layout_marginTop="@dimen/_1sdp"
+        android:layout_weight="0.5"
+        android:drawableLeft="@mipmap/lock"
+        android:drawablePadding="@dimen/_5sdp"
+        android:background="@drawable/edittextstyleround"
+        android:ems="10"
+        android:hint="Enter OTP"
+        android:inputType="number"
+        android:paddingLeft="0dp"
+        android:textColor="#000000"
+        android:textColorHint="#999" />
+
+    <TextView
+        android:id="@+id/resendotp"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Resend OTP"
-        android:layout_marginLeft="180dp" />
+        android:layout_height="@dimen/_40sdp"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="@dimen/_1sdp"
+        android:layout_weight="0.5"
+
+        android:gravity="center"
+        android:text="Resend OTP" />
+</LinearLayout>
     <Button
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

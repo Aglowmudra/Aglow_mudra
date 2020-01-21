@@ -113,6 +113,7 @@ public class Login extends AppCompatActivity {
         Send_Click.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+
                 progressBar.setVisibility(View.VISIBLE);
                 Toast.makeText(Login.this, "woking", Toast.LENGTH_SHORT).show();
                 if (isValidate()) {
@@ -120,7 +121,7 @@ public class Login extends AppCompatActivity {
                         @Override
                         public void run() {
 
-                            LoginAttempt1();
+                           LoginAttempt1();
 
                         }
 

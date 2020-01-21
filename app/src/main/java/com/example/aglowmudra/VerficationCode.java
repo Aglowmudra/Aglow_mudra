@@ -31,7 +31,7 @@ import okhttp3.RequestBody;
 import okhttp3.Response;
 
 public class VerficationCode extends AppCompatActivity {
-    Button button;
+    Button Register;
     EditText Code_value;
     String Phone_number;
     EditText Passsword, ConformPassword;
@@ -47,7 +47,7 @@ public class VerficationCode extends AppCompatActivity {
         Phone_number = intent.getStringExtra("Phone_number");
         Log.d("TAG", "VAlue od code phone" + Phone_number);
         CountTime();
-        button.setOnClickListener(new View.OnClickListener() {
+        Register.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Log.d("TAG", "Value is creted");
@@ -84,7 +84,7 @@ public class VerficationCode extends AppCompatActivity {
     }
 
     public void initi() {
-        button = (Button) findViewById(R.id.register);
+        Register = (Button) findViewById(R.id.register);
         Code_value = (EditText) findViewById(R.id.otp);
         Passsword = findViewById(R.id.EnterPassword);
         ConformPassword = findViewById(R.id.Confirmpassword);
@@ -220,11 +220,11 @@ public class VerficationCode extends AppCompatActivity {
     public void CountTime() {
         new CountDownTimer(30000, 1000) {
             public void onTick(long millisUntilFinished) {
-                Code_value.setError("                   " + millisUntilFinished / 1000);
+                Resend.setText("                   " + millisUntilFinished / 1000);
             }
 
             public void onFinish() {
-                Code_value.setText("");
+                Register.setText("");
                 Resend.setVisibility(View.VISIBLE);
             }
         }.start();
